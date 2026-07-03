@@ -517,11 +517,22 @@ export default function Home() {
                 Walk Through the Demo
               </a>
             </div>
+            <div className="demo-card">
+              <span className="label">03 — For Ownership</span>
+              <h3>The intelligence layer</h3>
+              <p>
+                How AI supports concierge, triage, pricing, and owner reporting
+                on top of Blumont OS — and what we deliberately leave out.
+              </p>
+              <a className="btn btn-bronze" href="/intelligence">
+                Read the Intelligence Brief
+              </a>
+            </div>
           </div>
           <p className="demo-disclaimer">
-            Both are interactive prototypes built to demonstrate the approach
-            — not the final, Blumont-branded systems, which would be
-            configured and deployed during mobilization.
+            The reservation and OS demos are interactive prototypes built to
+            demonstrate the approach — not the final, Blumont-branded systems,
+            which would be configured and deployed during mobilization.
           </p>
         </div>
       </section>
@@ -671,11 +682,6 @@ export default function Home() {
                   welcome.
                 </p>
               </div>
-            </div>
-            <div className="reveal" style={{ marginTop: 44 }}>
-              <a href="/intelligence" className="demo-link">
-                How this reporting is kept fast and accurate behind the scenes →
-              </a>
             </div>
           </div>
         </section>

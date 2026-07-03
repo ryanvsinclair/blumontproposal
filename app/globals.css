@@ -425,21 +425,20 @@ section { padding: 110px 0; }
 }
 .demo-cards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   border-top: 1px solid rgba(160, 128, 80, 0.45);
   border-bottom: 1px solid rgba(160, 128, 80, 0.45);
-  max-width: 980px;
+  max-width: 1100px;
   margin: 0 auto;
   text-align: left;
 }
 .demo-card {
-  padding: 52px 48px 56px 0;
+  padding: 48px 28px 52px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 .demo-card + .demo-card {
-  padding-left: 48px;
   border-left: 1px solid rgba(160, 128, 80, 0.25);
 }
 .demo-card h3 {
@@ -659,6 +658,121 @@ section { padding: 110px 0; }
   line-height: 1.25;
 }
 .intel-card p { font-size: 14px; line-height: 1.65; opacity: 0.78; }
+.intel-grid-hint {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  opacity: 0.55;
+  margin: 0 0 14px;
+}
+.intel-card-btn {
+  cursor: pointer;
+  text-align: left;
+  border: none;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  transition: background 0.2s ease;
+}
+.intel-card-btn:hover { background: rgba(160, 128, 80, 0.06); }
+.intel-card-btn:focus-visible {
+  outline: 2px solid var(--bronze);
+  outline-offset: -2px;
+}
+.intel-card-more {
+  display: block;
+  margin-top: auto;
+  padding-top: 18px;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bronze);
+  opacity: 0.85;
+}
+.intel-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 6vw;
+  background: rgba(15, 26, 27, 0.58);
+  backdrop-filter: blur(6px);
+}
+.intel-modal {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: min(88vh, 720px);
+  overflow-y: auto;
+  background: var(--bone);
+  border: 1px solid rgba(160, 128, 80, 0.35);
+  padding: 44px 40px 48px;
+}
+.intel-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  border: none;
+  background: none;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--ink);
+  opacity: 0.45;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+.intel-modal-close:hover { opacity: 0.85; }
+.intel-modal-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.intel-modal-head .icon {
+  width: 36px;
+  height: 36px;
+  color: var(--bronze);
+  flex-shrink: 0;
+}
+.intel-modal-head .icon svg { width: 100%; height: 100%; }
+.intel-modal h3 {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(26px, 3vw, 34px);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+.intel-modal-detail {
+  font-size: 15px;
+  line-height: 1.75;
+  opacity: 0.82;
+  margin-bottom: 24px;
+}
+.intel-modal-bullets {
+  list-style: none;
+  border-top: 1px solid rgba(160, 128, 80, 0.3);
+  padding-top: 20px;
+}
+.intel-modal-bullets li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.65;
+  opacity: 0.78;
+  margin-bottom: 12px;
+}
+.intel-modal-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 1px;
+  background: var(--bronze);
+}
 
 /* ---------- against grid (intelligence page) ---------- */
 .against-grid {
@@ -689,6 +803,11 @@ section { padding: 110px 0; }
   margin-bottom: 6px;
 }
 .against-item p { font-size: 13.5px; line-height: 1.65; opacity: 0.72; }
+.against-grid-compact {
+  grid-template-columns: 1fr;
+  gap: 0;
+  max-width: 640px;
+}
 
 /* ---------- intelligence sub-nav ---------- */
 .subnav {
@@ -841,7 +960,8 @@ footer .fine { font-size: 12px; opacity: 0.55; }
 .acct.reveal.visible .acct-item:nth-child(3) { transition-delay: 220ms; }
 
 .demo-band .wrap.reveal.visible .demo-card:nth-child(1) { transition-delay: 0ms; }
-.demo-band .wrap.reveal.visible .demo-card:nth-child(2) { transition-delay: 140ms; }
+.demo-band .wrap.reveal.visible .demo-card:nth-child(2) { transition-delay: 120ms; }
+.demo-band .wrap.reveal.visible .demo-card:nth-child(3) { transition-delay: 240ms; }
 
 #strategy .wrap.reveal.visible .pillar-tab:nth-child(1) { transition-delay: 0ms; }
 #strategy .wrap.reveal.visible .pillar-tab:nth-child(2) { transition-delay: 70ms; }
