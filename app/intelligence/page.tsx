@@ -147,8 +147,8 @@ export default function Intelligence() {
             Nothing here replaces what is already proposed. It just makes the
             same commitments faster to deliver.
           </p>
-          <a className="btn btn-solid" href="/#contact">
-            Back to Next Steps
+          <a className="btn btn-solid" href="/#close">
+            Back to the Proposal
           </a>
         </div>
       </div>

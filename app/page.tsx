@@ -396,7 +396,7 @@ export default function Home() {
             <a href="#timeline">Timeline</a>
             <a href="#fees">Fees</a>
             <a href="#accountability">Accountability</a>
-            <a href="#contact">Contact</a>
+            <a href="#close">Close</a>
           </div>
         </div>
         <ScrollProgress />
@@ -685,26 +685,21 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= CTA ================= */}
-        <section className="cta" id="contact">
+        {/* ================= CLOSE ================= */}
+        <section className="cta" id="close">
           <div className="wrap reveal">
-            <span className="label">Next Steps</span>
-            <h2>See the tower with us</h2>
+            <span className="label">In Closing</span>
+            <h2>One plan, sequenced to perform</h2>
             <p className="cta-sub">
-              Book a walkthrough with the REOM Homes team to see the property
-              and agree on operating targets together.
+              Revenue, leasing, facilities, and reporting are not separate
+              workstreams. They are a single operating plan: earn first, invest
+              when occupancy supports it, and report in plain language so
+              ownership always knows where the property stands.
             </p>
-            <div className="btn-row">
-              <a
-                className="btn btn-solid"
-                href="mailto:info@reomhomes.ae?subject=Blumont%20Capital%20Tower%20Walkthrough"
-              >
-                Schedule a Walkthrough
-              </a>
-              <a className="btn btn-ghost" href={PROPOSAL_DOC} download>
-                Download Full Proposal
-              </a>
-            </div>
+            <p className="close-signoff">
+              REOM Homes is ready to mobilize Blumont Capital Tower on that
+              basis.
+            </p>
           </div>
         </section>
       </div>
