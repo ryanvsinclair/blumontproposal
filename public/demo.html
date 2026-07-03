@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blumont OS — Guest ↔ Staff Live Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bone:#FAF7F2; --ink:#1C1917; --bronze:#A08050; --bronze-soft:#C4A97D;
+  --teal:#1B3A3D; --teal-deep:#132B2E; --line:#E5DFD5; --muted:#8A8175; --card:#fff;
+  --ok:#3E7C4F; --warn:#B98A2E; --bad:#B5483A; --info:#4A6FA5;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#EFEAE1;font-family:'Jost',sans-serif;font-weight:300;color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.serif{font-family:'Cormorant Garamond',serif}
+button{font-family:'Jost',sans-serif;cursor:pointer}
+button:focus-visible{outline:2px solid var(--bronze);outline-offset:2px}
+
+/* ===== top bar ===== */
+.topbar{background:var(--ink);color:var(--bone);padding:14px 28px;display:flex;align-items:center;justify-content:space-between}
+.topbar .wm{font-family:'Cormorant Garamond',serif;letter-spacing:.26em;text-transform:uppercase;font-size:16px}
+.topbar .wm span{color:var(--bronze-soft)}
+.topbar .tag{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--bronze-soft);border:1px solid rgba(196,169,125,.4);padding:4px 12px}
+
+/* ===== layout ===== */
+.demo{display:grid;grid-template-columns:1fr 400px;gap:0;min-height:calc(100vh - 120px)}
+@media(max-width:1080px){.demo{grid-template-columns:1fr}.phone-col{padding:40px 0 60px}}
+
+/* ============ STAFF SIDE ============ */
+.staff{display:grid;grid-template-columns:170px 1fr;background:var(--bone);border-right:1px solid #D8D2C6}
+.snav{background:var(--teal);color:#CFE0DD;padding:22px 0;display:flex;flex-direction:column;gap:2px}
+.snav .brand{font-family:'Cormorant Garamond',serif;font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:#fff;padding:0 20px 20px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:14px}
+.snav .brand small{display:block;font-family:'Jost';font-size:9px;letter-spacing:.24em;color:#7FA39E;margin-top:4px}
+.snav button{background:none;border:none;color:#9FBDB9;text-align:left;padding:11px 20px;font-size:12px;letter-spacing:.1em;font-weight:400;border-left:2px solid transparent;transition:all .2s}
+.snav button:hover{color:#fff}
+.snav button.on{color:#fff;border-left-color:var(--bronze-soft);background:rgba(255,255,255,.05)}
+.snav .badge{background:var(--bronze-soft);color:var(--teal-deep);font-size:9px;font-weight:600;border-radius:9px;padding:1px 7px;margin-left:8px;vertical-align:1px}
+
+.smain{padding:26px 30px;overflow-y:auto;max-height:calc(100vh - 120px)}
+.sview{display:none;animation:fade .35s ease both}
+.sview.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.sview,.push,.scanline{animation:none!important}}
+
+.shead{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px}
+.shead h2{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400}
+.shead .date{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+/* KPI strip */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.kpi{background:var(--card);border:1px solid var(--line);padding:14px 16px}
+.kpi .k{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.kpi .v{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--bronze);font-weight:400;line-height:1.2}
+.kpi .v small{font-size:14px;color:var(--muted)}
+
+/* section blocks */
+.blk{background:var(--card);border:1px solid var(--line);margin-bottom:18px}
+.blk-h{padding:12px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.blk-h h3{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--teal)}
+.scan-btn{background:var(--teal);color:#fff;border:none;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;padding:10px 20px;transition:background .2s}
+.scan-btn:hover{background:var(--teal-deep)}
+
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:500;text-align:left;padding:10px 18px;border-bottom:1px solid var(--line)}
+td{padding:12px 18px;border-bottom:1px solid #F0EBE1;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr.hl{background:#FBF6EC}
+.gname{font-weight:500}
+.gsub{font-size:11px;color:var(--muted)}
+.pill{display:inline-block;font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;padding:4px 10px;border-radius:2px}
+.pill.ok{background:#E6F0E8;color:var(--ok)}
+.pill.warn{background:#F7EEDB;color:var(--warn)}
+.pill.bad{background:#F6E4E1;color:var(--bad)}
+.pill.info{background:#E5EBF4;color:var(--info)}
+.pill.grey{background:#EEEAE2;color:var(--muted)}
+.rowbtn{border:1px solid var(--line);background:none;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;transition:all .2s;color:var(--ink)}
+.rowbtn:hover:not(:disabled){border-color:var(--teal);color:var(--teal)}
+.rowbtn:disabled{opacity:.35;cursor:default}
+.rowbtn.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
+.rowbtn.primary:hover:not(:disabled){background:var(--teal-deep)}
+
+/* housekeeping board */
+.hk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:16px 18px}
+.hk-room{border:1px solid var(--line);padding:12px;text-align:center}
+.hk-room .num{font-family:'Cormorant Garamond',serif;font-size:20px}
+.hk-room .st{font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-top:4px}
+.hk-room.clean .st{color:var(--ok)}
+.hk-room.dirty .st{color:var(--bad)}
+.hk-room.cleaning .st{color:var(--warn)}
+.hk-room.inspected{border-color:var(--ok)}
+.hk-room.inspected .st{color:var(--ok);font-weight:600}
+.hk-room button{margin-top:8px;width:100%;border:1px solid var(--line);background:none;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:6px 4px}
+.hk-room button:hover:not(:disabled){border-color:var(--ok);color:var(--ok)}
+.hk-room button:disabled{opacity:.3;cursor:default}
+
+/* requests */
+.req-empty{padding:26px 18px;text-align:center;color:var(--muted);font-size:13px;font-style:italic}
+.req-row{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid #F0EBE1;animation:fade .4s ease both}
+.req-row .sla{font-size:10px;color:var(--warn);letter-spacing:.08em}
+
+/* scan modal */
+.modal-bg{position:fixed;inset:0;background:rgba(28,25,23,.55);display:none;align-items:center;justify-content:center;z-index:100}
+.modal-bg.on{display:flex}
+.scan-modal{background:var(--card);width:380px;padding:34px;text-align:center;border-top:3px solid var(--teal)}
+.scan-modal h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;margin-bottom:6px}
+.scan-modal p{font-size:12px;color:var(--muted);margin-bottom:22px}
+.scan-frame{width:190px;height:190px;margin:0 auto 22px;position:relative;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.scanline{position:absolute;left:0;right:0;height:2px;background:var(--teal);box-shadow:0 0 12px rgba(27,58,61,.5);animation:scan 1.4s ease-in-out infinite}
+@keyframes scan{0%,100%{top:8%}50%{top:88%}}
+
+/* rescard (reservation card after scan) */
+.rescard{text-align:left}
+.rescard .rrow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dotted var(--line);font-size:13px}
+.rescard .rrow .k{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.rescard .rrow .v{font-weight:400}
+.rescard .rrow .v.serif{font-size:16px}
+.modal-actions{display:flex;gap:10px;margin-top:22px}
+.modal-actions .rowbtn{flex:1;padding:12px}
+.gate-note{background:#F7EEDB;color:var(--warn);font-size:11px;padding:10px 14px;margin-top:16px;letter-spacing:.04em;display:none}
+.gate-note.on{display:block}
+
+/* fake QR */
+.qr{display:grid;grid-template-columns:repeat(13,1fr);gap:1px;width:150px;height:150px;background:#fff;padding:6px}
+.qr i{background:#1C1917}
+.qr i.w{background:transparent}
+
+/* ============ GUEST PHONE ============ */
+.phone-col{background:linear-gradient(170deg,#E9E2D5,#DDD4C2);display:flex;align-items:flex-start;justify-content:center;padding:36px 0 60px}
+.phone{width:330px;background:#0E0D0C;border-radius:42px;padding:10px;box-shadow:0 30px 70px rgba(28,25,23,.35);position:sticky;top:30px}
+.screen{background:var(--bone);border-radius:34px;overflow:hidden;height:660px;position:relative;display:flex;flex-direction:column}
+.notch{height:26px;display:flex;justify-content:center;align-items:flex-start;background:var(--bone)}
+.notch::after{content:'';width:110px;height:20px;background:#0E0D0C;border-radius:0 0 14px 14px}
+
+/* push notification */
+.push{position:absolute;top:10px;left:12px;right:12px;background:rgba(28,25,23,.94);color:var(--bone);border-radius:14px;padding:12px 16px;font-size:12px;z-index:40;transform:translateY(-120%);transition:transform .45s cubic-bezier(.2,.9,.3,1.2);display:flex;gap:12px;align-items:center}
+.push.show{transform:translateY(0)}
+.push .picon{width:30px;height:30px;border-radius:7px;background:var(--bronze);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;color:var(--bone);flex-shrink:0;font-size:15px}
+.push b{font-weight:500;display:block;font-size:12px}
+.push span{color:#B9B2A6;font-size:11px;line-height:1.4}
+
+.pscreen{display:none;flex:1;overflow-y:auto;flex-direction:column}
+.pscreen.on{display:flex}
+
+/* email screen */
+.email{padding:22px}
+.email .from{display:flex;gap:10px;align-items:center;margin-bottom:16px}
+.email .av{width:34px;height:34px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:15px}
+.email .subj{font-weight:500;font-size:14px}
+.email .meta{font-size:11px;color:var(--muted)}
+.email-body{background:#fff;border:1px solid var(--line);padding:24px 20px;text-align:center}
+.email-body .rule{width:36px;height:1px;background:var(--bronze);margin:0 auto 16px}
+.email-body h4{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:19px;margin-bottom:4px}
+.email-body p{font-size:11px;color:var(--muted);margin-bottom:16px;line-height:1.6}
+.email-body .qr{margin:0 auto 16px;width:130px;height:130px}
+.ebtn{display:block;width:100%;border:1px solid var(--ink);background:var(--ink);color:var(--bone);font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:13px;margin-top:8px;transition:background .2s}
+.ebtn:hover{background:var(--bronze);border-color:var(--bronze)}
+.ebtn.ghost{background:none;color:var(--ink);border-color:var(--line)}
+.ebtn.ghost:hover{background:none;color:var(--ink);border-color:var(--ink)}
+.wallet-strip{display:flex;align-items:center;gap:8px;justify-content:center;font-size:10px;color:var(--muted);margin-top:10px;letter-spacing:.06em}
+
+/* app chrome */
+.app-head{padding:16px 20px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline}
+.app-head .wm{font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.22em;text-transform:uppercase}
+.app-head .wm span{color:var(--bronze)}
+.app-head .g{font-size:10px;color:var(--muted);letter-spacing:.1em}
+.app-body{flex:1;overflow-y:auto;padding:18px 20px 8px}
+.tabbar{display:flex;border-top:1px solid var(--line);background:#fff}
+.tabbar button{flex:1;background:none;border:none;padding:12px 4px 14px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+.tabbar button.on{color:var(--bronze)}
+.tabbar button:disabled{opacity:.35}
+
+.stay-status{background:#fff;border:1px solid var(--line);padding:20px;text-align:center;margin-bottom:16px}
+.stay-status .lab{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--bronze);margin-bottom:6px}
+.stay-status h4{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;line-height:1.3}
+.stay-status p{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.6}
+.stay-facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:16px}
+.stay-facts div{background:#fff;padding:12px 14px}
+.stay-facts .k{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.stay-facts .v{font-family:'Cormorant Garamond',serif;font-size:17px}
+.precheck-cta{width:100%;border:1px solid var(--bronze);background:#FBF6EC;color:var(--ink);font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:14px;transition:all .2s}
+.precheck-cta:hover{background:var(--bronze);color:#fff}
+.precheck-cta:disabled{opacity:.4;cursor:default}
+.done-note{font-size:11px;color:var(--ok);text-align:center;letter-spacing:.06em;padding:8px 0}
+
+/* precheck form */
+.pc-field{margin-bottom:16px}
+.pc-field .k{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips button{border:1px solid var(--line);background:none;padding:8px 14px;font-size:11px;transition:all .2s}
+.chips button.on{border-color:var(--bronze);background:#FBF6EC}
+.id-box{border:1px dashed var(--line);padding:16px;text-align:center;font-size:11px;color:var(--muted);cursor:pointer;transition:all .2s}
+.id-box.done{border-color:var(--ok);color:var(--ok);border-style:solid}
+
+/* key */
+.keycard{background:linear-gradient(150deg,#B08D5B,#8A6A3E 60%,#75592F);border-radius:16px;padding:24px 22px;color:#FAF3E6;min-height:180px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 14px 30px rgba(138,106,62,.35);margin-bottom:16px}
+.keycard .kwm{font-family:'Cormorant Garamond',serif;letter-spacing:.24em;text-transform:uppercase;font-size:12px}
+.keycard .kroom{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;line-height:1}
+.keycard .kmeta{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#E8D9BC;display:flex;justify-content:space-between}
+.unlock{width:100%;border:1px solid var(--ink);background:var(--ink);color:var(--bone);font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:15px;transition:all .3s}
+.unlock.opened{background:var(--ok);border-color:var(--ok)}
+.key-locked{text-align:center;color:var(--muted);font-size:12px;padding:60px 20px;font-style:italic;line-height:1.7}
+
+/* requests (guest) */
+.req-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.req-opts button{border:1px solid var(--line);background:#fff;padding:16px 10px;font-size:11px;letter-spacing:.06em;transition:all .2s}
+.req-opts button:hover:not(:disabled){border-color:var(--bronze)}
+.req-opts button:disabled{opacity:.4;cursor:default}
+.greq{background:#fff;border:1px solid var(--line);padding:12px 14px;margin-bottom:10px;font-size:12px;display:flex;justify-content:space-between;align-items:center;animation:fade .4s ease both}
+
+/* folio */
+.frow{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dotted var(--line);font-size:12px}
+.frow .d{color:var(--muted);font-size:10px}
+.ftot{display:flex;justify-content:space-between;padding-top:16px;align-items:baseline}
+.ftot .v{font-family:'Cormorant Garamond',serif;font-size:26px}
+.checkout-btn{width:100%;border:1px solid var(--ink);background:var(--ink);color:var(--bone);font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:15px;margin-top:18px}
+.checkout-btn:hover:not(:disabled){background:var(--bronze);border-color:var(--bronze)}
+.checkout-btn:disabled{opacity:.35;cursor:default}
+
+/* receipt */
+.receipt{text-align:center;padding:50px 26px}
+.receipt .rule{width:40px;height:1px;background:var(--bronze);margin:0 auto 24px}
+.receipt h4{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;margin-bottom:10px}
+.receipt p{font-size:12px;color:var(--muted);line-height:1.7}
+
+/* ===== event log ===== */
+.eventlog{background:var(--ink);color:#B9B2A6;font-size:11px;padding:10px 28px;display:flex;gap:26px;align-items:center;overflow-x:auto;white-space:nowrap;min-height:40px}
+.eventlog .lab{color:var(--bronze-soft);letter-spacing:.2em;text-transform:uppercase;font-size:9px;flex-shrink:0}
+.ev{flex-shrink:0;animation:fade .4s ease both}
+.ev b{color:var(--bone);font-weight:400}
+.ev .dir{color:var(--bronze-soft)}
+
+/* ===== guided walkthrough ===== */
+.topbar .replay{background:none;border:1px solid rgba(196,169,125,.4);color:var(--bronze-soft);font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:4px 12px;margin-right:10px;transition:all .2s}
+.topbar .replay:hover{border-color:var(--bronze-soft);color:var(--bone)}
+.tour-block{position:fixed;inset:0;z-index:215;display:none}
+.tour-block.on{display:block}
+.tour-hole{position:fixed;z-index:220;pointer-events:none;border:1px solid var(--bronze-soft);box-shadow:0 0 0 9999px rgba(19,43,46,.58);transition:all .45s cubic-bezier(.4,0,.2,1);display:none}
+.tour-hole.on{display:block}
+.tour-hole.free{border-color:transparent}
+.tour-card{position:fixed;z-index:230;width:370px;max-width:calc(100vw - 40px);background:var(--bone);border-top:3px solid var(--bronze);box-shadow:0 24px 60px rgba(28,25,23,.4);padding:26px 28px 20px;display:none;transition:left .45s cubic-bezier(.4,0,.2,1),top .45s cubic-bezier(.4,0,.2,1)}
+.tour-card.on{display:block}
+.tour-card .tk{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--bronze);margin-bottom:9px}
+.tour-card h4{font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:400;line-height:1.25;margin-bottom:9px}
+.tour-card p{font-size:12.5px;line-height:1.65;color:#57534E}
+.tour-foot{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:14px;border-top:1px solid var(--line)}
+.tour-step{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.tour-btns{display:flex;gap:8px}
+.tour-ghost{background:none;border:none;color:var(--muted);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:9px 10px;transition:color .2s}
+.tour-ghost:hover{color:var(--ink)}
+.tour-solid{background:var(--ink);border:1px solid var(--ink);color:var(--bone);font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:9px 18px;transition:all .2s}
+.tour-solid:hover{background:var(--bronze);border-color:var(--bronze)}
+@media(prefers-reduced-motion:reduce){.tour-hole,.tour-card{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wm">Blumont <span>·</span> Operating System</div>
+  <div>
+    <button class="replay" onclick="location.reload()">↻ Replay walkthrough</button>
+    <span class="tag">Live demo — guest & staff in sync</span>
+  </div>
+</div>
+
+<div class="demo">
+
+  <!-- ================= STAFF ================= -->
+  <div class="staff">
+    <nav class="snav">
+      <div class="brand">Blumont<small>Front Desk</small></div>
+      <button class="on" id="navToday" onclick="sview('today',this)">Today</button>
+      <button onclick="sview('today',this)">Reservations</button>
+      <button id="navHK" onclick="sview('hk',this)">Housekeeping</button>
+      <button onclick="sview('req',this)" id="navReq">Requests<span class="badge" id="reqBadge" style="display:none">0</span></button>
+      <button onclick="sview('today',this)">Folios</button>
+      <button onclick="sview('today',this)">Reports</button>
+    </nav>
+
+    <div class="smain">
+      <!-- TODAY -->
+      <div class="sview on" id="v-today">
+        <div class="shead"><h2>Front desk — today</h2><span class="date">Sat 15 Aug 2026 · 14:05</span></div>
+        <div class="kpis" id="tourKpis">
+          <div class="kpi"><div class="k">Occupancy tonight</div><div class="v" id="kOcc">78<small>%</small></div></div>
+          <div class="kpi"><div class="k">Arrivals remaining</div><div class="v" id="kArr">3</div></div>
+          <div class="kpi"><div class="k">In-house</div><div class="v" id="kIn">96</div></div>
+          <div class="kpi"><div class="k">ADR today</div><div class="v">AED 512</div></div>
+        </div>
+
+        <div class="blk">
+          <div class="blk-h"><h3>Arrivals</h3><button class="scan-btn" onclick="openScan()">⌞ ⌝ &nbsp;Scan arrival QR</button></div>
+          <table>
+            <thead><tr><th>Guest</th><th>Residence</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr class="hl" id="rowLayla">
+                <td><div class="gname">Layla Haddad</div><div class="gsub">BLM-2026-4417 · 2 guests · 5 nights</div></td>
+                <td><div>Premium Room</div><div class="gsub" id="roomAssign">Room 1406 · Gulf view</div></td>
+                <td id="laylaStatus"><span class="pill info" id="pillPre">Booked</span></td>
+                <td><button class="rowbtn" disabled id="laylaAct">Awaiting scan</button></td>
+              </tr>
+              <tr>
+                <td><div class="gname">Marcus Chen</div><div class="gsub">BLM-2026-4409 · 1 guest · 2 nights</div></td>
+                <td><div>Executive Suite</div><div class="gsub">Room 806 · City view</div></td>
+                <td><span class="pill grey">Booked</span></td>
+                <td><button class="rowbtn" disabled>Awaiting scan</button></td>
+              </tr>
+              <tr>
+                <td><div class="gname">Fatima Al Suwaidi</div><div class="gsub">BLM-2026-4421 · 3 guests · 7 nights</div></td>
+                <td><div>One-Bedroom Apartment</div><div class="gsub">Room 2203 · Gulf view</div></td>
+                <td><span class="pill info">Pre-checked</span></td>
+                <td><button class="rowbtn" disabled>Awaiting scan</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="blk">
+          <div class="blk-h"><h3>Departures</h3></div>
+          <table>
+            <tbody>
+              <tr id="rowLaylaDep" style="display:none">
+                <td><div class="gname">Layla Haddad</div><div class="gsub">Room 1406</div></td>
+                <td><span class="pill ok">Express checkout · paid</span></td>
+                <td style="text-align:right"><span class="gsub">Folio closed — key revoked</span></td>
+              </tr>
+              <tr id="depEmpty"><td colspan="3" style="color:var(--muted);font-style:italic">No departures pending.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- HOUSEKEEPING -->
+      <div class="sview" id="v-hk">
+        <div class="shead"><h2>Housekeeping — floor 14</h2><span class="date">Priority ordered by declared arrival times</span></div>
+        <div class="blk" id="tourHK">
+          <div class="blk-h"><h3>Room board</h3><span class="gsub" id="hkNote">Room 1406 prioritised — guest arriving ~14:00</span></div>
+          <div class="hk-grid" id="hkGrid"></div>
+        </div>
+      </div>
+
+      <!-- REQUESTS -->
+      <div class="sview" id="v-req">
+        <div class="shead"><h2>Guest requests</h2><span class="date">Routed automatically · SLA tracked</span></div>
+        <div class="blk" id="tourReqBlk">
+          <div class="blk-h"><h3>Open queue</h3></div>
+          <div id="reqQueue"><div class="req-empty">No open requests. Everything a guest asks for in the app lands here with an SLA timer.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= GUEST PHONE ================= -->
+  <div class="phone-col">
+    <div class="phone" id="tourPhone"><div class="screen">
+      <div class="push" id="push"><div class="picon">B</div><div><b id="pushT">Blumont</b><span id="pushS"></span></div></div>
+      <div class="notch"></div>
+
+      <!-- EMAIL -->
+      <div class="pscreen on" id="ps-email">
+        <div class="email">
+          <div class="from"><div class="av">B</div><div><div class="subj">Your reservation at Blumont Capital Tower</div><div class="meta">reservations@blumont.ae · just now</div></div></div>
+          <div class="email-body">
+            <div class="rule"></div>
+            <h4>We look forward to receiving you, Layla</h4>
+            <p>Premium Room · Gulf view<br>15 — 20 August 2026 · 2 guests<br>Reservation BLM-2026-4417</p>
+            <div class="qr" id="qr1"></div>
+            <p style="margin-bottom:4px">Present this code on arrival for one-minute check-in.</p>
+            <button class="ebtn ghost" onclick="toast('Reservation pass added to Apple Wallet')">＋ Add to Apple Wallet</button>
+            <button class="ebtn" onclick="enterApp()">Manage your stay</button>
+            <div class="wallet-strip">No app download required — opens in your browser</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- APP -->
+      <div class="pscreen" id="ps-app">
+        <div class="app-head"><div class="wm">Blumont <span>·</span> Stay</div><div class="g">L. Haddad</div></div>
+        <div class="app-body" id="appBody"></div>
+        <div class="tabbar">
+          <button class="on" id="tb-stay" onclick="gtab('stay')">Stay</button>
+          <button id="tb-key" onclick="gtab('key')">Key</button>
+          <button id="tb-req" onclick="gtab('req')">Requests</button>
+          <button id="tb-folio" onclick="gtab('folio')">Folio</button>
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+</div>
+
+<!-- event log -->
+<div class="eventlog" id="tourLog"><span class="lab">System events</span><div id="evStream"></div></div>
+
+<!-- guided walkthrough overlay -->
+<div class="tour-block" id="tourBlock"></div>
+<div class="tour-hole" id="tourHole"></div>
+<div class="tour-card" id="tourCard"></div>
+
+<!-- SCAN MODAL -->
+<div class="modal-bg" id="scanBg">
+  <div class="scan-modal" id="scanModal"></div>
+</div>
+
+<script>
+/* ================= shared state ================= */
+const S={
+  preChecked:false, arrivalTime:null, idDone:false,
+  roomState:'cleaning',           // cleaning -> inspected -> occupied -> dirty
+  checkedIn:false, keyIssued:false, keyType:null, doorOpened:false,
+  requests:[                      // {id,label,status,room,guest,sla}
+    {id:-1,label:'Fresh towels',status:'open',room:'1104',guest:'Daniel Osei',sla:'SLA 18 min left'},
+    {id:-2,label:'Extra pillows · 2',status:'open',room:'2011',guest:'Mariam Khoury',sla:'SLA 26 min left'},
+    {id:-3,label:'Maintenance: bathroom light flickering',status:'done',room:'1912',guest:'Omar Al Nuaimi',sla:''},
+    {id:-4,label:'Late checkout — 14:00',status:'done',room:'707',guest:'Priya Raman',sla:''},
+  ],
+  folio:[
+    {d:'15–20 Aug',l:'Premium Room · Flexible · 5 nights',v:2100},
+    {d:'15–20 Aug',l:'Tourism fee · AED 15 × 5',v:75},
+  ],
+  checkedOut:false,
+  gtab:'stay',
+};
+let reqId=0;
+
+/* ================= event log ================= */
+function logEv(dir,txt){
+  const el=document.createElement('span');el.className='ev';
+  el.innerHTML=`<span class="dir">${dir}</span> <b>${txt}</b> &nbsp;·`;
+  const s=document.getElementById('evStream');s.prepend(el);
+  while(s.children.length>6)s.removeChild(s.lastChild);
+}
+
+/* ================= fake QR ================= */
+function makeQR(el,seed){
+  let h='';let x=seed;
+  for(let i=0;i<169;i++){x=(x*16807)%2147483647;
+    const corner=(r,c)=>(i%13>=c&&i%13<c+3)&&(Math.floor(i/13)>=r&&Math.floor(i/13)<r+3);
+    const on=corner(0,0)||corner(0,10)||corner(10,0)||((x%7)<3);
+    h+=`<i class="${on?'':'w'}"></i>`;}
+  el.innerHTML=h;
+}
+makeQR(document.getElementById('qr1'),4417);
+
+/* ================= push notifications ================= */
+let pushTimer=null;
+function toast(sub,title='Blumont Capital Tower'){
+  document.getElementById('pushT').textContent=title;
+  document.getElementById('pushS').textContent=sub;
+  const p=document.getElementById('push');p.classList.add('show');
+  clearTimeout(pushTimer);pushTimer=setTimeout(()=>p.classList.remove('show'),3400);
+}
+
+/* ================= staff nav ================= */
+function sview(id,btn){
+  document.querySelectorAll('.sview').forEach(v=>v.classList.remove('on'));
+  document.getElementById('v-'+id).classList.add('on');
+  document.querySelectorAll('.snav button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+/* ================= housekeeping ================= */
+const HKROOMS=[
+  {n:'1402',st:'clean'},{n:'1404',st:'dirty'},{n:'1406',st:null},{n:'1408',st:'clean'},
+  {n:'1410',st:'cleaning'},{n:'1412',st:'clean'},{n:'1414',st:'dirty'},{n:'1416',st:'clean'},
+];
+function renderHK(){
+  document.getElementById('hkGrid').innerHTML=HKROOMS.map(r=>{
+    const st=r.n==='1406'?S.roomState:r.st;
+    const cls=st==='inspected'?'inspected':st==='occupied'?'clean':st;
+    const label={clean:'Clean',dirty:'Dirty',cleaning:'Cleaning',inspected:'Inspected · ready',occupied:'Occupied'}[st];
+    const btn=r.n==='1406'
+      ? (st==='cleaning'?`<button onclick="inspectRoom()">Mark inspected</button>`
+        :st==='dirty'?`<button disabled>Awaiting clean</button>`
+        :`<button disabled>${st==='occupied'?'In-house':'Ready'}</button>`)
+      :`<button disabled>—</button>`;
+    return `<div class="hk-room ${cls}"><div class="num serif">${r.n}</div><div class="st">${label}</div>${btn}</div>`;
+  }).join('');
+}
+function inspectRoom(){
+  S.roomState='inspected';renderHK();
+  logEv('STAFF → GUEST','Room 1406 inspected — guest notified “residence ready”');
+  toast('Your residence is ready. Room 1406 awaits you whenever you arrive.');
+  renderApp();
+}
+
+/* ================= scan + check-in ================= */
+let scanTimer=null;
+function openScan(){
+  const bg=document.getElementById('scanBg');bg.classList.add('on');
+  const m=document.getElementById('scanModal');
+  m.innerHTML=`<h3>Scan arrival code</h3><p>Point the desk scanner at the guest's phone, wallet pass, or printout.</p>
+    <div class="scan-frame"><div class="qr" id="qr2"></div><div class="scanline"></div></div>
+    <p style="letter-spacing:.14em;text-transform:uppercase;font-size:10px">Searching…</p>`;
+  makeQR(document.getElementById('qr2'),4417);
+  scanTimer=setTimeout(showResCard,1600);
+}
+function showResCard(){
+  clearTimeout(scanTimer);
+  const ready=S.roomState==='inspected';
+  document.getElementById('scanModal').innerHTML=`
+    <h3 class="serif">Layla Haddad</h3>
+    <p>BLM-2026-4417 · matched in 0.4s</p>
+    <div class="rescard">
+      <div class="rrow"><span class="k">Residence</span><span class="v serif">Premium Room — 1406</span></div>
+      <div class="rrow"><span class="k">Stay</span><span class="v">15 – 20 Aug · 5 nights · 2 guests</span></div>
+      <div class="rrow"><span class="k">ID verification</span><span class="v">${S.idDone?'<span class="pill ok">Verified online</span>':'<span class="pill warn">Check passport at desk</span>'}</span></div>
+      <div class="rrow"><span class="k">Preferences</span><span class="v">High floor · away from lifts</span></div>
+      <div class="rrow"><span class="k">Folio</span><span class="v">AED 2,175 · card guaranteed</span></div>
+      <div class="rrow"><span class="k">Room status</span><span class="v">${ready?'<span class="pill ok">Inspected · ready</span>':'<span class="pill warn">Not yet inspected</span>'}</span></div>
+    </div>
+    <div class="gate-note ${ready?'':'on'}">Check-in gated: room 1406 has not been marked inspected. Open Housekeeping to release it, or reassign.</div>
+    <div class="modal-actions">
+      <button class="rowbtn" onclick="closeScan()">Close</button>
+      <button class="rowbtn primary" ${ready?'':'disabled'} onclick="confirmArrival()">Confirm arrival</button>
+    </div>`;
+}
+function closeScan(){document.getElementById('scanBg').classList.remove('on')}
+function confirmArrival(){
+  S.checkedIn=true;S.roomState='occupied';
+  document.getElementById('scanModal').innerHTML=`
+    <h3 class="serif">Guest checked in</h3><p>How would Ms Haddad like her key?</p>
+    <div class="modal-actions" style="flex-direction:column">
+      <button class="rowbtn primary" style="padding:14px" onclick="issueKey('mobile')">Send mobile key — Apple Wallet</button>
+      <button class="rowbtn" style="padding:14px" onclick="issueKey('card')">Encode physical key card</button>
+    </div>`;
+  logEv('STAFF','Arrival confirmed — Layla Haddad · Room 1406 · 58 seconds desk time');
+  updateArrivalRow();renderHK();
+}
+function issueKey(type){
+  S.keyIssued=true;S.keyType=type;
+  closeScan();
+  updateArrivalRow();
+  document.getElementById('kArr').textContent='2';
+  document.getElementById('kIn').textContent='97';
+  if(type==='mobile'){
+    logEv('STAFF → GUEST','Mobile key issued to Apple Wallet — valid room 1406 until 20 Aug 12:00');
+    toast('Your room key has been added to Apple Wallet. Residence 1406 — hold your phone to the door.');
+  }else{
+    logEv('STAFF','Key card encoded — room 1406, expires 20 Aug 12:00');
+    toast('Welcome, Layla. Your key card is ready — Residence 1406, floor 14.');
+  }
+  renderApp();
+}
+function updateArrivalRow(){
+  document.getElementById('laylaStatus').innerHTML='<span class="pill ok">Checked in</span>';
+  document.getElementById('laylaAct').textContent='In-house';
+}
+
+/* ================= requests (staff queue) ================= */
+function renderReqQueue(){
+  const q=document.getElementById('reqQueue');
+  const open=S.requests;
+  document.getElementById('reqBadge').style.display=open.filter(r=>r.status!=='done').length?'inline-block':'none';
+  document.getElementById('reqBadge').textContent=open.filter(r=>r.status!=='done').length;
+  if(!open.length){q.innerHTML='<div class="req-empty">No open requests. Everything a guest asks for in the app lands here with an SLA timer.</div>';return;}
+  q.innerHTML=open.map(r=>`
+    <div class="req-row">
+      <div><div class="gname">${r.label}</div><div class="gsub">Room ${r.room} · ${r.guest} · via guest app</div></div>
+      <div style="display:flex;gap:14px;align-items:center">
+        ${r.status==='done'?'<span class="pill ok">Completed</span>':`<span class="sla">${r.sla||'SLA 30 min'}</span><button class="rowbtn primary" onclick="doneReq(${r.id})">Mark done</button>`}
+      </div>
+    </div>`).join('');
+}
+function doneReq(id){
+  const r=S.requests.find(x=>x.id===id);r.status='done';
+  renderReqQueue();renderApp();
+  logEv('STAFF → GUEST',`Request completed: ${r.label} — Room ${r.room} notified`);
+  if(r.guest==='Layla Haddad')toast(`${r.label} — done. Anything else, just ask.`);
+}
+
+/* ================= guest app ================= */
+function enterApp(){
+  document.getElementById('ps-email').classList.remove('on');
+  document.getElementById('ps-app').classList.add('on');
+  logEv('GUEST','Opened guest portal from confirmation email (web — no install)');
+  renderApp();
+}
+function gtab(t){
+  S.gtab=t;
+  ['stay','key','req','folio'].forEach(x=>document.getElementById('tb-'+x).classList.toggle('on',x===t));
+  renderApp();
+}
+function renderApp(){
+  const b=document.getElementById('appBody');
+  if(S.checkedOut){b.innerHTML=`<div class="receipt"><div class="rule"></div><h4>Until next time, Layla.</h4>
+    <p>Your folio is settled and the receipt is in your inbox.<br>Your key has been deactivated.<br><br>Your preferences are saved for your return.</p></div>`;return;}
+
+  if(S.gtab==='stay'){
+    const status=!S.checkedIn
+      ?(S.roomState==='inspected'
+        ?{l:'Residence ready',h:'Room 1406 awaits you.',p:'Present your QR code at reception — check-in takes under a minute.'}
+        :{l:'Before you arrive',h:'Your residence is being prepared.',p:'We\'ll notify you the moment it\'s ready. Check in online below to speed up your arrival.'})
+      :{l:'In residence',h:'Welcome to Blumont, Layla.',p:'Residence 1406 · floor 14 · Gulf aspect. Your key is in the Key tab.'};
+    b.innerHTML=`
+      <div class="stay-status"><div class="lab">${status.l}</div><h4 class="serif">${status.h}</h4><p>${status.p}</p></div>
+      <div class="stay-facts">
+        <div><div class="k">Arrival</div><div class="v serif">15 Aug</div></div>
+        <div><div class="k">Departure</div><div class="v serif">20 Aug</div></div>
+        <div><div class="k">Residence</div><div class="v serif">Premium Room</div></div>
+        <div><div class="k">Guests</div><div class="v serif">2</div></div>
+      </div>
+      ${!S.checkedIn?(S.preChecked
+        ?`<div class="done-note">✓ Checked in online — ID verified, arriving ${S.arrivalTime||'—'}</div>`
+        :`<button class="precheck-cta" onclick="showPrecheck()">Check in online — save time on arrival</button>`)
+        :`<div class="done-note">✓ Checked in · 15 Aug, 14:06</div>`}`;
+  }
+  if(S.gtab==='key'){
+    b.innerHTML=!S.keyIssued
+      ?`<div class="key-locked">Your key appears here after check-in.<br>Reception simply scans your QR code —<br>no forms, no waiting.</div>`
+      :`<div class="keycard">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start"><span class="kwm">Blumont</span><span class="kmeta">${S.keyType==='mobile'?'Apple Wallet':'Key card'}</span></div>
+          <div><div class="kmeta" style="margin-bottom:4px">Residence</div><div class="kroom">1406</div></div>
+          <div class="kmeta"><span>L. Haddad</span><span>Valid to 20 Aug · 12:00</span></div>
+        </div>
+        ${S.keyType==='mobile'?`<button class="unlock ${S.doorOpened?'opened':''}" onclick="unlockDoor(this)">${S.doorOpened?'✓ Door unlocked':'Hold near door to unlock'}</button>`:`<div class="done-note">Physical card active — tap it to your door.</div>`}`;
+  }
+  if(S.gtab==='req'){
+    const can=S.checkedIn;
+    b.innerHTML=`
+      <div class="req-opts">
+        ${['Fresh towels','Make up room','Extra pillows','Report an issue'].map(l=>`<button ${can?'':'disabled'} onclick="sendReq('${l}')">${l}</button>`).join('')}
+      </div>
+      ${!can?'<div class="key-locked" style="padding:20px">Requests open once you\'re in residence.</div>':''}
+      ${S.requests.filter(r=>r.guest==='Layla Haddad').map(r=>`<div class="greq"><span>${r.label}</span>${r.status==='done'?'<span class="pill ok">Done</span>':'<span class="pill warn">In progress</span>'}</div>`).join('')}`;
+  }
+  if(S.gtab==='folio'){
+    const tot=S.folio.reduce((a,x)=>a+x.v,0);
+    b.innerHTML=`
+      ${S.folio.map(f=>`<div class="frow"><div><div>${f.l}</div><div class="d">${f.d}</div></div><div>AED ${f.v.toLocaleString()}</div></div>`).join('')}
+      <div class="ftot"><span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">Total</span><span class="v serif">AED ${tot.toLocaleString()}</span></div>
+      <button class="checkout-btn" ${S.checkedIn?'':'disabled'} onclick="expressCheckout()">Express checkout — settle & go</button>
+      <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.6">No desk visit needed. Your key deactivates automatically<br>and your receipt is emailed instantly.</div>`;
+  }
+}
+
+/* precheck flow */
+function showPrecheck(){
+  const b=document.getElementById('appBody');
+  b.innerHTML=`
+    <div class="stay-status"><div class="lab">Online check-in</div><h4 class="serif">Two things, thirty seconds.</h4></div>
+    <div class="pc-field"><span class="k">When will you arrive?</span>
+      <div class="chips">${['Before 14:00','14:00 – 18:00','After 18:00'].map(t=>`<button onclick="pickTime(this,'${t}')">${t}</button>`).join('')}</div></div>
+    <div class="pc-field"><span class="k">Travel document</span>
+      <div class="id-box" id="idBox" onclick="uploadId()">Tap to photograph your passport<br><small>Required for Abu Dhabi guest registration</small></div></div>
+    <button class="precheck-cta" id="pcDone" disabled onclick="finishPrecheck()">Complete check-in</button>`;
+}
+function pickTime(btn,t){S.arrivalTime=t;btn.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('on'));btn.classList.add('on');checkPc();}
+function uploadId(){S.idDone=true;const x=document.getElementById('idBox');x.classList.add('done');x.innerHTML='✓ Passport captured & encrypted';checkPc();}
+function checkPc(){document.getElementById('pcDone').disabled=!(S.arrivalTime&&S.idDone);}
+function finishPrecheck(){
+  S.preChecked=true;
+  document.getElementById('pillPre').outerHTML='<span class="pill info" id="pillPre">Pre-checked · ID ✓</span>';
+  logEv('GUEST → STAFF',`Online check-in complete — ID verified, arriving ${S.arrivalTime}. Housekeeping queue re-prioritised.`);
+  gtab('stay');
+}
+
+/* key */
+function unlockDoor(btn){
+  S.doorOpened=true;renderApp();
+  logEv('GUEST','Door 1406 unlocked via mobile key — entry logged 14:12');
+  setTimeout(()=>{S.doorOpened=false;if(S.gtab==='key'&&!S.checkedOut)renderApp();},2600);
+}
+
+/* guest request */
+function sendReq(label){
+  if(label==='Report an issue')label='Maintenance: AC too warm';
+  S.requests.unshift({id:++reqId,label,status:'open',room:'1406',guest:'Layla Haddad',sla:'SLA 30 min'});
+  renderApp();renderReqQueue();
+  logEv('GUEST → STAFF',`Request raised: ${label} — routed to ${label.startsWith('Maintenance')?'maintenance queue':'housekeeping queue'}, SLA 30 min`);
+}
+
+/* checkout */
+function expressCheckout(){
+  S.checkedOut=true;S.keyIssued=false;S.roomState='dirty';
+  renderApp();renderHK();
+  document.getElementById('laylaStatus').innerHTML='<span class="pill grey">Departed</span>';
+  document.getElementById('laylaAct').textContent='Closed';
+  document.getElementById('rowLaylaDep').style.display='';
+  document.getElementById('depEmpty').style.display='none';
+  document.getElementById('kIn').textContent='96';
+  logEv('GUEST → STAFF','Express checkout — folio settled AED 2,175 · key revoked · room 1406 flipped to Dirty on housekeeping board');
+}
+
+/* ================= guided walkthrough ================= */
+function q(id){return document.getElementById(id)}
+
+const TOUR=[
+  {k:'The staff console',title:'The day at a glance',
+   text:'Occupancy tonight, arrivals remaining, guests in house, and today\u2019s ADR \u2014 live from the reservation system, not compiled at month-end.',
+   target:()=>q('tourKpis')},
+  {k:'Arrivals',title:'Meet today\u2019s guest',
+   text:'Layla Haddad \u2014 Premium Room 1406, Gulf view, five nights, two guests. Her entire stay is about to flow through the screens in front of you.',
+   target:()=>q('rowLayla')},
+  {k:'The guest\u2019s side',title:'It begins with an email',
+   text:'The confirmation carries a QR arrival pass \u2014 added to Apple Wallet or opened straight from the browser. Nothing to download, nothing to print.',
+   target:()=>q('tourPhone')},
+  {k:'Before arrival',title:'Check-in starts at home',
+   text:'Layla opens \u201cManage your stay\u201d, declares her arrival window, and photographs her passport for Abu Dhabi guest registration \u2014 thirty seconds, done.',
+   action:()=>{enterApp();S.arrivalTime='14:00 \u2013 18:00';S.idDone=true;finishPrecheck();},
+   target:()=>q('tourPhone')},
+  {k:'Guest \u2192 staff',title:'The desk already knows',
+   text:'Her status flips to \u201cPre-checked \u00b7 ID \u2713\u201d the moment she finishes \u2014 and housekeeping re-orders its afternoon around her arrival window.',
+   target:()=>q('rowLayla')},
+  {k:'Housekeeping',title:'A board that thinks in arrivals',
+   text:'Floor fourteen, ordered by who lands first. Room 1406 sits at the top of the queue because Layla is due mid-afternoon.',
+   action:()=>sview('hk',q('navHK')),
+   target:()=>q('tourHK')},
+  {k:'Staff \u2192 guest',title:'Inspected \u2014 and she knows',
+   text:'One tap marks the room ready, and Layla\u2019s phone lights up: \u201cYour residence is ready.\u201d No phone calls, no radio checks.',
+   action:()=>inspectRoom(),
+   target:()=>q('tourPhone')},
+  {k:'Arrival',title:'One code at the desk',
+   text:'Layla presents her QR \u2014 from Wallet, the email, or a printout \u2014 and the scanner matches her reservation in under a second.',
+   action:()=>{sview('today',q('navToday'));openScan();},
+   target:()=>q('scanModal')},
+  {k:'Arrival',title:'The whole stay on one card',
+   text:'Identity already verified, preferences visible, folio guaranteed, room inspected. Had 1406 not been ready, check-in would be gated until it was.',
+   action:()=>showResCard(),
+   target:()=>q('scanModal')},
+  {k:'Arrival',title:'Checked in \u2014 58 seconds',
+   text:'The reservation is confirmed and one decision remains: how would she like her key?',
+   action:()=>confirmArrival(),
+   target:()=>q('scanModal')},
+  {k:'The key',title:'Straight to her wallet',
+   text:'A mobile key for Residence 1406, valid until noon on departure day. She holds her phone to the door \u2014 the entry is logged.',
+   action:()=>{issueKey('mobile');gtab('key');},
+   target:()=>q('tourPhone')},
+  {k:'In residence',title:'Requests route themselves',
+   text:'Fresh towels, asked from the sofa. It lands in the staff queue with a 30-minute SLA \u2014 alongside every other room\u2019s requests.',
+   action:()=>{gtab('req');sendReq('Fresh towels');sview('req',q('navReq'));},
+   target:()=>q('tourReqBlk')},
+  {k:'Staff \u2192 guest',title:'Done \u2014 and she\u2019s told',
+   text:'Staff marks it complete and Layla is notified in the same breath. Every request is timestamped for the service record.',
+   action:()=>{const r=S.requests.find(x=>x.guest==='Layla Haddad'&&x.status!=='done');if(r)doneReq(r.id);},
+   target:()=>q('tourPhone')},
+  {k:'Transparency',title:'The folio, no surprises',
+   text:'Room, tourism fee, running total \u2014 visible for the whole stay. Which makes the final step effortless\u2026',
+   action:()=>gtab('folio'),
+   target:()=>q('tourPhone')},
+  {k:'Departure',title:'Checkout without the desk',
+   text:'One tap settles the folio, revokes the key, emails the receipt \u2014 and flips 1406 to \u201cdirty\u201d on the housekeeping board.',
+   action:()=>{expressCheckout();sview('today',q('navToday'));},
+   target:()=>q('rowLaylaDep')},
+  {k:'The audit trail',title:'Every hand-off, recorded',
+   text:'The event stream below captured the entire stay you just watched \u2014 the same data that feeds ownership\u2019s monthly operating report.',
+   target:()=>q('tourLog'),last:true},
+];
+
+let tourI=-1;
+function tourStart(){tourI=-1;tourNext();}
+function tourNext(){
+  tourI++;
+  if(tourI>=TOUR.length)return tourEnd();
+  const s=TOUR[tourI];
+  if(s.action)s.action();
+  setTimeout(()=>tourShow(s),s.action?350:80);
+}
+function tourShow(s){
+  const card=q('tourCard'),hole=q('tourHole');
+  card.innerHTML=`<div class="tk">${s.k}</div><h4>${s.title}</h4><p>${s.text}</p>
+    <div class="tour-foot"><span class="tour-step">${tourI+1} of ${TOUR.length}</span><div class="tour-btns">${
+      s.last?`<button class="tour-ghost" onclick="location.reload()">\u21bb Replay</button><button class="tour-solid" onclick="tourEnd()">Explore freely</button>`
+            :`<button class="tour-ghost" onclick="tourEnd()">Skip</button><button class="tour-solid" onclick="tourNext()">Continue</button>`
+    }</div></div>`;
+  card.classList.add('on');q('tourBlock').classList.add('on');
+  const el=s.target&&s.target();
+  if(!el){tourCenter(card,hole);return;}
+  el.scrollIntoView({block:'center'});
+  requestAnimationFrame(()=>{
+    const r=el.getBoundingClientRect(),p=10;
+    hole.classList.add('on');hole.classList.remove('free');
+    hole.style.left=(r.left-p)+'px';hole.style.top=(r.top-p)+'px';
+    hole.style.width=(r.width+2*p)+'px';hole.style.height=(r.height+2*p)+'px';
+    tourPlace(card,r);
+  });
+}
+function tourPlace(card,r){
+  const w=card.offsetWidth,h=card.offsetHeight,m=20;
+  let left,top;
+  if(r.right+w+m+20<innerWidth){left=r.right+m;top=r.top;}
+  else if(r.left-w-m>20){left=r.left-w-m;top=r.top;}
+  else if(r.bottom+h+m+20<innerHeight){left=r.left;top=r.bottom+m;}
+  else{left=r.left;top=r.top-h-m;}
+  card.style.left=Math.min(Math.max(20,left),innerWidth-w-20)+'px';
+  card.style.top=Math.min(Math.max(20,top),innerHeight-h-20)+'px';
+}
+function tourCenter(card,hole){
+  hole.classList.add('on','free');
+  hole.style.left='50vw';hole.style.top='42vh';hole.style.width='0';hole.style.height='0';
+  card.style.left=Math.max(20,(innerWidth-card.offsetWidth)/2)+'px';
+  card.style.top=Math.max(20,(innerHeight-card.offsetHeight)/2)+'px';
+}
+function tourEnd(){
+  ['tourCard','tourHole','tourBlock'].forEach(i=>q(i).classList.remove('on'));
+}
+function tourWelcome(){
+  const card=q('tourCard'),hole=q('tourHole');
+  q('tourBlock').classList.add('on');
+  card.innerHTML=`<div class="tk">Guided walkthrough \u2014 two minutes</div>
+    <h4>One reservation, two screens.</h4>
+    <p>Blumont OS runs the property on the left and sits in the guest\u2019s hand on the right. Follow one guest \u2014 Layla Haddad \u2014 from confirmation to checkout, and watch both sides move in sync.</p>
+    <div class="tour-foot"><span class="tour-step">16 steps</span><div class="tour-btns">
+      <button class="tour-ghost" onclick="tourEnd()">Explore on my own</button>
+      <button class="tour-solid" onclick="tourStart()">Begin</button>
+    </div></div>`;
+  card.classList.add('on');
+  tourCenter(card,hole);
+}
+window.addEventListener('resize',()=>{
+  if(q('tourCard').classList.contains('on')&&tourI>=0&&tourI<TOUR.length)tourShow(TOUR[tourI]);
+});
+
+/* init */
+renderHK();renderReqQueue();renderApp();
+logEv('SYSTEM','Reservation BLM-2026-4417 confirmed — QR token minted, confirmation email sent');
+tourWelcome();
+</script>
+</body>
+</html>

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reserve — Blumont Capital Tower</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bone:#FAF7F2; --ink:#1C1917; --bronze:#A08050; --bronze-soft:#C4A97D;
+    --teal:#1B3A3D; --line:#E5DFD5; --muted:#8A8175; --card:#FFFFFF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bone);color:var(--ink);font-family:'Jost',sans-serif;font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased}
+  ::selection{background:var(--bronze);color:var(--bone)}
+
+  .serif{font-family:'Cormorant Garamond',serif}
+  .label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--bronze);font-weight:400}
+  .label--muted{color:var(--muted)}
+
+  header{border-bottom:1px solid var(--line);padding:22px 40px;display:flex;align-items:center;justify-content:space-between;background:var(--bone);position:sticky;top:0;z-index:50}
+  .wordmark{font-family:'Cormorant Garamond',serif;font-size:21px;letter-spacing:.28em;text-transform:uppercase;font-weight:400}
+  .wordmark span{color:var(--bronze)}
+  .preview-tag{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:5px 12px;border-radius:2px}
+
+  .progress{max-width:1180px;margin:0 auto;padding:44px 40px 0;display:flex;align-items:center}
+  .step-marker{display:flex;align-items:center;gap:12px;flex-shrink:0}
+  .step-num{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--muted);font-weight:300;transition:color .4s}
+  .step-name{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);transition:color .4s}
+  .step-marker.active .step-num{color:var(--bronze)}
+  .step-marker.active .step-name{color:var(--ink)}
+  .step-marker.done .step-num{color:var(--ink)}
+  .step-line{flex:1;height:1px;background:var(--line);margin:0 24px;position:relative;overflow:hidden}
+  .step-line::after{content:'';position:absolute;inset:0;background:var(--bronze);transform:scaleX(0);transform-origin:left;transition:transform .6s ease}
+  .step-line.filled::after{transform:scaleX(1)}
+
+  .shell{max-width:1180px;margin:0 auto;padding:36px 40px 100px;display:grid;grid-template-columns:1fr 330px;gap:56px;align-items:start}
+  .stage{min-height:520px}
+  .panel{display:none;animation:fadeUp .6s ease both}
+  .panel.visible{display:block}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.panel{animation:none}.step-line::after{transition:none}}
+
+  .stage-title{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,3.4vw,42px);font-weight:300;line-height:1.15;margin:10px 0 8px}
+  .stage-sub{color:var(--muted);max-width:56ch;font-size:15px;margin-bottom:32px}
+
+  /* calendar */
+  .cal-wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+  .cal{border-top:1px solid var(--line);padding-top:18px}
+  .cal-month{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;margin-bottom:16px}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+  .cal-dow{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-align:center;padding-bottom:10px}
+  .cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:17px;cursor:pointer;border:1px solid transparent;transition:all .18s;color:var(--ink);background:none}
+  .cal-day:hover:not(.off){border-color:var(--bronze)}
+  .cal-day:focus-visible{outline:1.5px solid var(--bronze);outline-offset:-1px}
+  .cal-day.off{visibility:hidden}
+  .cal-day.sel{background:var(--ink);color:var(--bone)}
+  .cal-day.range{background:#EFE8DC}
+  .dates-note{margin-top:26px;font-size:13px;color:var(--muted);display:flex;gap:28px;flex-wrap:wrap}
+  .dates-note b{font-weight:500;color:var(--ink)}
+  .guest-row{display:flex;gap:44px;margin-top:34px;padding-top:26px;border-top:1px solid var(--line)}
+  .counter{display:flex;align-items:center;gap:18px}
+  .counter button{width:34px;height:34px;border:1px solid var(--line);background:none;font-size:17px;cursor:pointer;color:var(--ink);transition:border-color .2s;font-family:'Jost',sans-serif;font-weight:300}
+  .counter button:hover{border-color:var(--bronze)}
+  .counter button:focus-visible{outline:1.5px solid var(--bronze);outline-offset:2px}
+  .counter .val{font-family:'Cormorant Garamond',serif;font-size:24px;min-width:20px;text-align:center}
+
+  /* ---------- filters ---------- */
+  .filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:26px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+  .filter-bar .label--muted{margin-right:6px}
+  .chip{border:1px solid var(--line);background:none;padding:8px 18px;font-family:'Jost',sans-serif;font-weight:300;font-size:12px;letter-spacing:.1em;cursor:pointer;transition:all .2s;color:var(--ink)}
+  .chip:hover{border-color:var(--bronze-soft)}
+  .chip:focus-visible{outline:1.5px solid var(--bronze);outline-offset:2px}
+  .chip.on{border-color:var(--bronze);background:#FBF6EC;color:var(--ink)}
+  .occ-note{font-size:12px;color:var(--muted);margin-left:auto;letter-spacing:.06em}
+
+  /* ---------- rooms ---------- */
+  .room{border:1px solid var(--line);background:var(--card);margin-bottom:26px;transition:border-color .25s}
+  .room.selected{border-color:var(--bronze)}
+  .room.unavail{opacity:.55}
+  .room-top{display:grid;grid-template-columns:270px 1fr}
+  .room-art{position:relative;min-height:230px;cursor:pointer;background-size:cover;background-position:center;transition:background .5s ease}
+  .room-art::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(28,25,23,.55) 0%,transparent 40%);pointer-events:none}
+  .room-art .pane-label{position:absolute;bottom:38px;left:16px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--bone);z-index:1}
+  .gallery-dots{position:absolute;bottom:14px;left:16px;display:flex;gap:7px;z-index:1}
+  .gallery-dots button{width:7px;height:7px;border-radius:50%;border:1px solid var(--bone);background:none;cursor:pointer;padding:0;transition:background .2s}
+  .gallery-dots button.on{background:var(--bone)}
+  .gallery-dots button:focus-visible{outline:1.5px solid var(--bronze);outline-offset:2px}
+  .room-body{padding:26px 30px 24px}
+  .room-name{font-family:'Cormorant Garamond',serif;font-size:25px;font-weight:400;margin:4px 0 6px}
+  .room-meta{font-size:12px;letter-spacing:.08em;color:var(--muted);display:flex;gap:18px;margin-bottom:12px;flex-wrap:wrap}
+  .room-desc{font-size:14px;color:#57534E;max-width:56ch;margin-bottom:16px}
+  .rates{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .rate{border:1px solid var(--line);padding:12px 18px;min-width:170px;cursor:pointer;transition:all .2s;background:none;text-align:left;font-family:'Jost',sans-serif}
+  .rate:hover:not(:disabled){border-color:var(--bronze-soft)}
+  .rate:focus-visible{outline:1.5px solid var(--bronze);outline-offset:2px}
+  .rate:disabled{cursor:default;opacity:.5}
+  .rate.on{border-color:var(--bronze);background:#FBF6EC}
+  .rate-name{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+  .rate.on .rate-name{color:var(--bronze)}
+  .rate-price{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400}
+  .rate-price small{font-family:'Jost',sans-serif;font-size:11px;color:var(--muted);font-weight:300}
+  .details-toggle{background:none;border:none;font-family:'Jost',sans-serif;font-weight:300;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--bronze);cursor:pointer;padding:0;margin-left:auto}
+  .details-toggle:focus-visible{outline:1.5px solid var(--bronze);outline-offset:3px}
+  .occ-flag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px dotted var(--line);padding:8px 14px}
+
+  /* expandable detail */
+  .room-detail{display:none;border-top:1px solid var(--line);padding:26px 30px;background:#FCFAF6}
+  .room-detail.open{display:grid;grid-template-columns:1fr 1fr 1fr;gap:26px;animation:fadeUp .4s ease both}
+  .detail-col h4{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--bronze);font-weight:400;margin-bottom:12px}
+  .detail-col ul{list-style:none;font-size:13px;color:#57534E}
+  .detail-col li{padding:5px 0;border-bottom:1px dotted var(--line)}
+  .bed-toggle{display:flex;gap:10px;margin-top:4px}
+  .bed-btn{border:1px solid var(--line);background:none;padding:9px 20px;font-family:'Jost',sans-serif;font-weight:300;font-size:12px;letter-spacing:.12em;cursor:pointer;transition:all .2s}
+  .bed-btn:hover{border-color:var(--bronze-soft)}
+  .bed-btn:focus-visible{outline:1.5px solid var(--bronze);outline-offset:2px}
+  .bed-btn.on{border-color:var(--bronze);background:#FBF6EC}
+  .detail-note{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.6;grid-column:1/-1}
+
+  /* ---------- guest form ---------- */
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px 30px;max-width:640px}
+  .field{display:flex;flex-direction:column;gap:8px}
+  .field.full{grid-column:1/-1}
+  .field label{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .field input,.field textarea{border:none;border-bottom:1px solid var(--line);background:none;padding:8px 0 10px;font-family:'Jost',sans-serif;font-weight:300;font-size:16px;color:var(--ink);transition:border-color .25s}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--bronze)}
+  .field textarea{resize:vertical;min-height:64px}
+  .prefs{grid-column:1/-1;padding-top:8px}
+  .prefs .label{display:block;margin-bottom:14px}
+  .prefs-note{font-size:12px;color:var(--muted);margin-top:12px;max-width:58ch}
+
+  /* ---------- folio ---------- */
+  .folio{position:sticky;top:104px;background:var(--card);border:1px solid var(--line);padding:34px 30px 30px}
+  .folio::before{content:'';display:block;height:3px;background:var(--bronze);margin:-34px -30px 30px}
+  .folio-head{font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:6px}
+  .folio-prop{font-family:'Cormorant Garamond',serif;font-size:22px;text-align:center;font-weight:400;margin-bottom:26px}
+  .folio-row{display:flex;justify-content:space-between;align-items:baseline;padding:11px 0;border-bottom:1px dotted var(--line);font-size:13px;gap:12px}
+  .folio-row .k{letter-spacing:.14em;text-transform:uppercase;font-size:10px;color:var(--muted);flex-shrink:0}
+  .folio-row .v{font-family:'Cormorant Garamond',serif;font-size:16px;text-align:right}
+  .folio-row .v.empty{color:var(--line);font-style:italic;font-size:14px}
+  .folio-total{display:flex;justify-content:space-between;align-items:baseline;padding-top:20px;margin-top:6px}
+  .folio-total .k{letter-spacing:.18em;text-transform:uppercase;font-size:10px;color:var(--muted)}
+  .folio-total .v{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400}
+  .folio-fine{font-size:11px;color:var(--muted);margin-top:14px;line-height:1.6}
+
+  .actions{margin-top:44px;display:flex;gap:22px;align-items:center}
+  .btn{border:1px solid var(--ink);background:var(--ink);color:var(--bone);font-family:'Jost',sans-serif;font-weight:400;font-size:12px;letter-spacing:.22em;text-transform:uppercase;padding:16px 38px;cursor:pointer;transition:all .25s}
+  .btn:hover:not(:disabled){background:var(--bronze);border-color:var(--bronze)}
+  .btn:focus-visible{outline:2px solid var(--bronze);outline-offset:3px}
+  .btn:disabled{opacity:.3;cursor:default}
+  .btn-ghost{background:none;color:var(--ink);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--ink);background:none;color:var(--ink)}
+
+  .confirm{text-align:center;padding:60px 20px}
+  .confirm-rule{width:56px;height:1px;background:var(--bronze);margin:0 auto 34px}
+  .confirm h2{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;margin-bottom:14px}
+  .confirm p{color:var(--muted);max-width:48ch;margin:0 auto 8px;font-size:15px}
+  .confirm .ref{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--bronze);letter-spacing:.14em;margin-top:22px}
+
+  footer{border-top:1px solid var(--line);padding:30px 40px;display:flex;justify-content:space-between;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+  @media(max-width:960px){
+    .shell{grid-template-columns:1fr;gap:44px;padding:30px 22px 80px}
+    .folio{position:static}
+    .cal-wrap{grid-template-columns:1fr;gap:30px}
+    .room-top{grid-template-columns:1fr}
+    .room-art{min-height:150px}
+    .room-detail.open{grid-template-columns:1fr}
+    header{padding:18px 22px}
+    .progress{padding:30px 22px 0}
+    .step-name{display:none}
+    .form-grid{grid-template-columns:1fr}
+    .occ-note{margin-left:0;width:100%}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wordmark">Blumont <span>·</span> Capital Tower</div>
+  <div class="preview-tag">Reservation preview</div>
+</header>
+
+<nav class="progress" aria-label="Reservation steps">
+  <div class="step-marker active" id="m1"><span class="step-num serif">I</span><span class="step-name">Dates</span></div>
+  <div class="step-line" id="l1"></div>
+  <div class="step-marker" id="m2"><span class="step-num serif">II</span><span class="step-name">Residence</span></div>
+  <div class="step-line" id="l2"></div>
+  <div class="step-marker" id="m3"><span class="step-num serif">III</span><span class="step-name">Guest</span></div>
+</nav>
+
+<main class="shell">
+  <section class="stage">
+
+    <!-- STEP 1 -->
+    <div class="panel visible" id="p1">
+      <div class="label">Step I — Your stay</div>
+      <h1 class="stage-title">When shall we expect you?</h1>
+      <p class="stage-sub">Select an arrival and departure date. Every stay includes access to the pool deck, fitness suite, and residents' lounge.</p>
+
+      <div class="cal-wrap">
+        <div class="cal"><div class="cal-month">August 2026</div><div class="cal-grid" id="calA"></div></div>
+        <div class="cal"><div class="cal-month">September 2026</div><div class="cal-grid" id="calB"></div></div>
+      </div>
+
+      <div class="dates-note">
+        <span>Arrival — <b id="noteIn">select a date</b></span>
+        <span>Departure — <b id="noteOut">select a date</b></span>
+        <span><b id="noteNights">—</b></span>
+      </div>
+
+      <div class="guest-row">
+        <div class="counter">
+          <span class="label label--muted">Guests</span>
+          <button type="button" aria-label="Fewer guests" onclick="adjGuests(-1)">−</button>
+          <span class="val" id="gVal">2</span>
+          <button type="button" aria-label="More guests" onclick="adjGuests(1)">+</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="toStep2" disabled onclick="goStep(2)">Choose your residence</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="panel" id="p2">
+      <div class="label">Step II — The residences</div>
+      <h1 class="stage-title">Choose your residence</h1>
+      <p class="stage-sub">Residences are offered by category; your specific unit is assigned by our front office to honour the preferences you share at the next step. Rates are per night, inclusive of the 10% service charge.</p>
+
+      <div class="filter-bar" role="group" aria-label="Filter residences">
+        <span class="label--muted label">View</span>
+        <button class="chip on" data-view="all" onclick="setView('all',this)">All</button>
+        <button class="chip" data-view="gulf" onclick="setView('gulf',this)">Gulf view</button>
+        <button class="chip" data-view="city" onclick="setView('city',this)">City view</button>
+        <span class="occ-note" id="occNote">Showing residences for 2 guests</span>
+      </div>
+
+      <div id="roomList"></div>
+
+      <div class="actions">
+        <button class="btn btn-ghost" onclick="goStep(1)">Back to dates</button>
+        <button class="btn" id="toStep3" disabled onclick="goStep(3)">Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="panel" id="p3">
+      <div class="label">Step III — Guest details</div>
+      <h1 class="stage-title">May we take your details?</h1>
+      <p class="stage-sub">No payment is taken today. Your card guarantees the reservation; flexible rates may be cancelled without charge until 48 hours before arrival.</p>
+
+      <form class="form-grid" id="guestForm" onsubmit="return confirmRes(event)">
+        <div class="field"><label for="fn">First name</label><input id="fn" required autocomplete="given-name"></div>
+        <div class="field"><label for="ln">Last name</label><input id="ln" required autocomplete="family-name"></div>
+        <div class="field"><label for="em">Email</label><input id="em" type="email" required autocomplete="email"></div>
+        <div class="field"><label for="ph">Telephone</label><input id="ph" type="tel" required autocomplete="tel"></div>
+
+        <div class="prefs">
+          <span class="label">Stay preferences</span>
+          <div class="filter-bar" style="border:none;padding:0;margin:0" role="group" aria-label="Stay preferences">
+            <button type="button" class="chip" data-pref="High floor" onclick="togglePref(this)">High floor</button>
+            <button type="button" class="chip" data-pref="Away from lifts" onclick="togglePref(this)">Away from lifts</button>
+            <button type="button" class="chip" data-pref="Gulf aspect" onclick="togglePref(this)">Gulf aspect</button>
+            <button type="button" class="chip" data-pref="Early arrival" onclick="togglePref(this)">Early arrival</button>
+            <button type="button" class="chip" data-pref="Quiet corner" onclick="togglePref(this)">Quiet corner</button>
+          </div>
+          <p class="prefs-note">Your residence number is assigned on the day of arrival by our front office team, who will match these preferences against the available units on your floor range.</p>
+        </div>
+
+        <div class="field full"><label for="rq">Anything else? <span style="text-transform:none;letter-spacing:0">(optional)</span></label><textarea id="rq" placeholder="An occasion, an allergy, a late flight…"></textarea></div>
+        <div class="field full actions" style="margin-top:10px">
+          <button class="btn btn-ghost" type="button" onclick="goStep(2)">Back</button>
+          <button class="btn" type="submit">Confirm reservation</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- CONFIRMATION -->
+    <div class="panel" id="p4">
+      <div class="confirm">
+        <div class="confirm-rule"></div>
+        <h2>We look forward to receiving you.</h2>
+        <p id="confirmLine">Your reservation is held. A confirmation letter has been sent to your email with arrival guidance and concierge contact.</p>
+        <div class="ref" id="confirmRef">BLM-2026-0000</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- FOLIO -->
+  <aside class="folio" aria-label="Reservation summary">
+    <div class="folio-head">Reservation folio</div>
+    <div class="folio-prop">Blumont Capital Tower</div>
+    <div class="folio-row"><span class="k">Arrival</span><span class="v empty" id="fIn">—</span></div>
+    <div class="folio-row"><span class="k">Departure</span><span class="v empty" id="fOut">—</span></div>
+    <div class="folio-row"><span class="k">Nights</span><span class="v empty" id="fN">—</span></div>
+    <div class="folio-row"><span class="k">Guests</span><span class="v" id="fG">2</span></div>
+    <div class="folio-row"><span class="k">Residence</span><span class="v empty" id="fR">—</span></div>
+    <div class="folio-row"><span class="k">Bed</span><span class="v empty" id="fBed">—</span></div>
+    <div class="folio-row"><span class="k">Rate</span><span class="v empty" id="fRate">—</span></div>
+    <div class="folio-row"><span class="k">Preferences</span><span class="v empty" id="fPref">—</span></div>
+    <div class="folio-row"><span class="k">Tourism fee</span><span class="v empty" id="fFee">—</span></div>
+    <div class="folio-total"><span class="k">Total</span><span class="v" id="fTotal">AED —</span></div>
+    <div class="folio-fine">Rates include 10% service charge. Tourism fee of AED 15 per night applies. No payment is taken until arrival on flexible rates.</div>
+  </aside>
+</main>
+
+<footer>
+  <span>Blumont Capital Tower — Abu Dhabi</span>
+  <span>Managed by REOM Homes</span>
+</footer>
+
+<script>
+/* ------- data ------- */
+/* Room categories reflect the actual Blumont Capital Hotel inventory:
+   Premium Room (36 m²), Executive Suite (63 m²), One-Bedroom Apartment (76 m²),
+   Two-Bedroom Apartment (136 m²). Rates are illustrative. */
+const rooms=[
+  {id:'prm',name:'Premium Room',size:'36 m²',view:'gulf',viewLabel:'Gulf view',sleeps:2,beds:['King'],
+   desc:'A spacious, contemporary room with an en-suite bathroom and panoramic views over the Gulf. Sleeps two adults and one child.',
+   gallery:['Guest room','Bathroom','Gulf aspect'],
+   amen:{Room:['Panoramic Gulf views','Individually controlled climate','King bed','En-suite bathroom','Mini-bar'],
+         Comfort:['Fine linens','Bathrobes & slippers','Daily housekeeping','Room service','In-room safe'],
+         Building:['Outdoor & children\'s pools','Sauna & jacuzzi','Fitness centre','Valet parking','24-hour reception']},
+   rates:[{id:'flex',name:'Flexible',p:420},{id:'adv',name:'Advance purchase',p:378}]},
+  {id:'exs',name:'Executive Suite',size:'63 m²',view:'city',viewLabel:'City view',sleeps:2,beds:['King'],
+   desc:'Chic and comfortable, with kitchenette facilities and separate areas for sleeping, entertaining, and dining — plus a bathtub and separate walk-in shower.',
+   gallery:['Living area','Bedroom','Bathroom'],
+   amen:{Suite:['Separate living & dining areas','Kitchenette','King bed','Bathtub & walk-in shower','Mini-bar'],
+         Comfort:['Fine linens','Bathrobes & slippers','Daily housekeeping','Room service','In-room safe'],
+         Building:['Outdoor & children\'s pools','Sauna & jacuzzi','Fitness centre','Valet parking','24-hour reception']},
+   rates:[{id:'flex',name:'Flexible',p:560},{id:'adv',name:'Advance purchase',p:504}]},
+  {id:'1br',name:'One-Bedroom Apartment',size:'76 m²',view:'city',viewLabel:'City view',sleeps:4,beds:['King','Twin'],
+   desc:'A beautifully furnished apartment with a living room, elegant dining area, and kitchenette. Sleeps two adults and two children — suited to longer stays.',
+   gallery:['Living room','Bedroom','Kitchenette'],
+   amen:{Apartment:['Separate living room','Elegant dining area','Kitchenette','King or twin beds','Mini-bar'],
+         Comfort:['Fine linens','Bathrobes & slippers','Daily housekeeping','Room service','In-room safe'],
+         Building:['Outdoor & children\'s pools','Sauna & jacuzzi','Fitness centre','Valet parking','24-hour reception']},
+   rates:[{id:'flex',name:'Flexible',p:680},{id:'adv',name:'Advance purchase',p:612}]},
+  {id:'2br',name:'Two-Bedroom Apartment',size:'136 m²',view:'gulf',viewLabel:'Gulf view',sleeps:6,beds:['King & Twin'],
+   desc:'A fully equipped residential apartment with a comfortable dining area, full kitchen with modern appliances, and separate living areas. Sleeps four adults and two children.',
+   gallery:['Living room','Kitchen','Master bedroom'],
+   amen:{Apartment:['Two bedrooms, en-suite','Full kitchen with appliances','Separate living areas','Comfortable dining area','King & twin beds'],
+         Comfort:['Fine linens','Bathrobes & slippers','Daily housekeeping','Room service','In-room safe'],
+         Building:['Outdoor & children\'s pools','Sauna & jacuzzi','Fitness centre','Valet parking','24-hour reception']},
+   rates:[{id:'flex',name:'Flexible',p:950},{id:'adv',name:'Advance purchase',p:855}]},
+];
+const FEE_PER_NIGHT=15;
+
+/* ------- state ------- */
+let inDay=null,outDay=null,guests=2,selRoom=null,selRate=null,selBed={},viewFilter='all',openDetails={},galleryIdx={},prefs=[];
+
+/* ------- calendars ------- */
+const DOW=['Mo','Tu','We','Th','Fr','Sa','Su'];
+function buildCal(el,year,month,offsetDays){
+  let h=DOW.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  const first=new Date(year,month,1);
+  const startDow=(first.getDay()+6)%7;
+  const nDays=new Date(year,month+1,0).getDate();
+  for(let i=0;i<startDow;i++)h+='<button class="cal-day off" tabindex="-1"></button>';
+  for(let d=1;d<=nDays;d++){
+    const abs=offsetDays+d;
+    h+=`<button class="cal-day" data-abs="${abs}" data-lab="${d} ${month===7?'Aug':'Sep'}">${d}</button>`;
+  }
+  el.innerHTML=h;
+}
+buildCal(document.getElementById('calA'),2026,7,0);
+buildCal(document.getElementById('calB'),2026,8,31);
+document.querySelectorAll('.cal-day:not(.off)').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const abs=+b.dataset.abs;
+    if(inDay===null||(inDay!==null&&outDay!==null)){inDay=abs;outDay=null;}
+    else if(abs>inDay){outDay=abs;}
+    else{inDay=abs;outDay=null;}
+    paintCal();sync();
+  });
+});
+function paintCal(){
+  document.querySelectorAll('.cal-day:not(.off)').forEach(b=>{
+    const abs=+b.dataset.abs;
+    b.classList.toggle('sel',abs===inDay||abs===outDay);
+    b.classList.toggle('range',inDay!==null&&outDay!==null&&abs>inDay&&abs<outDay);
+  });
+}
+function labFor(abs){const b=document.querySelector(`.cal-day[data-abs="${abs}"]`);return b?b.dataset.lab:'—';}
+
+/* ------- guests ------- */
+function adjGuests(d){
+  guests=Math.min(6,Math.max(1,guests+d));
+  document.getElementById('gVal').textContent=guests;
+  const r=rooms.find(x=>x.id===selRoom);
+  if(r&&guests>r.sleeps){selRoom=null;selRate=null;}
+  renderRooms();sync();
+}
+
+/* ------- filters ------- */
+function setView(v,btn){
+  viewFilter=v;
+  document.querySelectorAll('.filter-bar [data-view]').forEach(b=>b.classList.toggle('on',b===btn));
+  renderRooms();
+}
+
+/* ------- rooms ------- */
+function renderRooms(){
+  document.getElementById('occNote').textContent=`Showing residences for ${guests} guest${guests>1?'s':''}`;
+  const visible=rooms.filter(r=>viewFilter==='all'||r.view===viewFilter);
+  document.getElementById('roomList').innerHTML=visible.map(r=>{
+    const over=guests>r.sleeps;
+    const gi=galleryIdx[r.id]||0;
+    const bed=selBed[r.id]||r.beds[0];
+    return `
+    <div class="room ${selRoom===r.id?'selected':''} ${over?'unavail':''}">
+      <div class="room-top">
+        <div class="room-art" style="background-image:url('/rooms/${r.id}-${gi+1}.png')" data-room="${r.id}" role="button" tabindex="0" aria-label="Next photo of ${r.name}">
+          <span class="pane-label">${r.gallery[gi]} · ${r.size}</span>
+          <div class="gallery-dots">
+            ${r.gallery.map((g,i)=>`<button aria-label="${g}" class="${i===gi?'on':''}" data-room="${r.id}" data-gi="${i}"></button>`).join('')}
+          </div>
+        </div>
+        <div class="room-body">
+          <div class="label label--muted">${r.viewLabel}</div>
+          <div class="room-name serif">${r.name}</div>
+          <div class="room-meta">
+            <span>${r.size}</span><span>${r.beds.join(' or ')}</span><span>Sleeps ${r.sleeps}</span>
+            <button class="details-toggle" data-room="${r.id}" data-act="toggle">${openDetails[r.id]?'Hide details':'View details'}</button>
+          </div>
+          <p class="room-desc">${r.desc}</p>
+          <div class="rates">
+            ${over
+              ? `<span class="occ-flag">For up to ${r.sleeps} guests — consider the Two-Bedroom Apartment</span>`
+              : r.rates.map(rt=>`
+                <button type="button" class="rate ${selRoom===r.id&&selRate===rt.id?'on':''}" data-room="${r.id}" data-rate="${rt.id}">
+                  <div class="rate-name">${rt.name}</div>
+                  <div class="rate-price serif">AED ${rt.p} <small>/ night</small></div>
+                </button>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="room-detail ${openDetails[r.id]?'open':''}">
+        ${Object.entries(r.amen).map(([k,items])=>`
+          <div class="detail-col"><h4>${k}</h4><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`).join('')}
+        ${r.beds.length>1?`
+        <div class="detail-note">
+          <span class="label label--muted" style="display:block;margin-bottom:10px">Bed configuration</span>
+          <div class="bed-toggle">
+            ${r.beds.map(b=>`<button type="button" class="bed-btn ${bed===b?'on':''}" data-room="${r.id}" data-bed="${b}">${b}</button>`).join('')}
+          </div>
+        </div>`:''}
+      </div>
+    </div>`;}).join('');
+
+  /* wire events */
+  document.querySelectorAll('.rate[data-room]').forEach(b=>{
+    b.addEventListener('click',e=>{e.stopPropagation();selRoom=b.dataset.room;selRate=b.dataset.rate;
+      if(!selBed[selRoom])selBed[selRoom]=rooms.find(x=>x.id===selRoom).beds[0];
+      renderRooms();sync();});
+  });
+  document.querySelectorAll('.details-toggle').forEach(b=>{
+    b.addEventListener('click',e=>{e.stopPropagation();openDetails[b.dataset.room]=!openDetails[b.dataset.room];renderRooms();});
+  });
+  document.querySelectorAll('.gallery-dots button').forEach(b=>{
+    b.addEventListener('click',e=>{e.stopPropagation();galleryIdx[b.dataset.room]=+b.dataset.gi;renderRooms();});
+  });
+  document.querySelectorAll('.room-art').forEach(a=>{
+    const cyc=()=>{const id=a.dataset.room;const r=rooms.find(x=>x.id===id);galleryIdx[id]=((galleryIdx[id]||0)+1)%r.gallery.length;renderRooms();};
+    a.addEventListener('click',cyc);
+    a.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();cyc();}});
+  });
+  document.querySelectorAll('.bed-btn').forEach(b=>{
+    b.addEventListener('click',e=>{e.stopPropagation();selBed[b.dataset.room]=b.dataset.bed;renderRooms();sync();});
+  });
+}
+renderRooms();
+
+/* ------- prefs ------- */
+function togglePref(btn){
+  const p=btn.dataset.pref;
+  btn.classList.toggle('on');
+  prefs=btn.classList.contains('on')?[...prefs,p]:prefs.filter(x=>x!==p);
+  sync();
+}
+
+/* ------- folio sync ------- */
+function money(n){return 'AED '+n.toLocaleString('en-US');}
+function sync(){
+  const nights=(inDay!==null&&outDay!==null)?outDay-inDay:null;
+  const set=(id,val,empty)=>{const el=document.getElementById(id);el.textContent=val;el.classList.toggle('empty',empty);};
+  set('fIn',inDay!==null?labFor(inDay):'—',inDay===null);
+  set('fOut',outDay!==null?labFor(outDay):'—',outDay===null);
+  set('fN',nights?`${nights}`:'—',!nights);
+  document.getElementById('fG').textContent=guests;
+  document.getElementById('noteIn').textContent=inDay!==null?labFor(inDay):'select a date';
+  document.getElementById('noteOut').textContent=outDay!==null?labFor(outDay):'select a date';
+  document.getElementById('noteNights').textContent=nights?`${nights} night${nights>1?'s':''}`:'—';
+  const r=rooms.find(x=>x.id===selRoom), rt=r?r.rates.find(x=>x.id===selRate):null;
+  set('fR',r?r.name:'—',!r);
+  set('fBed',r?(selBed[r.id]||r.beds[0]):'—',!r);
+  set('fRate',rt?`${rt.name} · ${money(rt.p)}/n`:'—',!rt);
+  set('fPref',prefs.length?prefs.join(', '):'—',!prefs.length);
+  if(nights&&rt){
+    const fee=nights*FEE_PER_NIGHT;
+    set('fFee',money(fee),false);
+    document.getElementById('fTotal').textContent=money(nights*rt.p+fee);
+  }else{set('fFee','—',true);document.getElementById('fTotal').textContent='AED —';}
+  document.getElementById('toStep2').disabled=!(nights);
+  document.getElementById('toStep3').disabled=!(nights&&rt);
+}
+sync();
+
+/* ------- steps ------- */
+function goStep(n){
+  [1,2,3,4].forEach(i=>document.getElementById('p'+i).classList.toggle('visible',i===n));
+  document.getElementById('m1').className='step-marker '+(n===1?'active':'done');
+  document.getElementById('m2').className='step-marker '+(n===2?'active':n>2?'done':'');
+  document.getElementById('m3').className='step-marker '+(n===3?'active':n>3?'done':'');
+  document.getElementById('l1').classList.toggle('filled',n>=2);
+  document.getElementById('l2').classList.toggle('filled',n>=3);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function confirmRes(e){
+  e.preventDefault();
+  const fn=document.getElementById('fn').value.trim();
+  document.getElementById('confirmRef').textContent='BLM-2026-'+String(Math.floor(1000+Math.random()*9000));
+  document.getElementById('confirmLine').textContent=
+    `Thank you${fn?', '+fn:''}. Your reservation is held — a confirmation letter with arrival guidance and concierge contact is on its way to your email.`;
+  goStep(4);
+  return false;
+}
+</script>
+</body>
+</html>

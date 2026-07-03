@@ -23,5 +23,9 @@ venv/
 # Build / cache
 dist/
 build/
+.next/
+out/
 .cache/
 *.log
+*.tsbuildinfo
+next-env.d.ts
