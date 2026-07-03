@@ -23,75 +23,75 @@ const capabilities: Capability[] = [
   {
     icon: "concierge",
     title: "AI Concierge",
-    line: "Answers in four languages and can act — book, bill, request — not just reply.",
+    line: "Answers in four languages. It can book, bill, and take requests, not just reply.",
     detail:
-      "The guest app chat becomes a 24/7 concierge in Arabic, English, Russian, and Chinese. It is given tools, not just answers — it can book a late checkout, post charges to the folio, file housekeeping requests with SLA timers, and extend stays against live availability.",
+      "The guest app chat becomes a 24/7 concierge in Arabic, English, Russian, and Chinese. It gets tools, not just answers: late checkout, folio charges, housekeeping requests with SLA timers, and stay extensions against live availability.",
     bullets: [
-      "Ambiguous or emotional requests escalate to staff with full conversation context",
-      "Extends front-desk language coverage without adding headcount",
+      "Anything unclear or emotional goes to staff with the full conversation attached",
+      "Covers more languages at the desk without adding headcount",
     ],
-    phase: "Phase I — ships with Blumont OS",
+    phase: "Phase I · ships with Blumont OS",
   },
   {
     icon: "triage",
     title: "Request Triage",
-    line: "Tags urgency and department from free text; flags at-risk guests early.",
+    line: "Reads free-text requests, tags urgency and department, and flags guests who need attention early.",
     detail:
-      "Free-text and chat input is classified by intent, urgency, and department automatically. Sentiment is tracked across a guest's messages so the GM is flagged before checkout when a stay is heading toward a bad review.",
+      "Chat and free-text input get sorted by intent, urgency, and department automatically. Sentiment is tracked across a guest's messages, so the GM gets a heads-up before checkout if a stay is going sideways.",
     bullets: [
-      "\"The AC is rattling and I can't sleep\" → high-priority maintenance ticket with apology and ETA sent before staff touch it",
-      "Turns reputation management from reactive to preventive",
+      "\"The AC is rattling and I can't sleep\" becomes a high-priority maintenance ticket, with apology and ETA sent before staff even see it",
+      "Reputation work becomes preventive, not reactive",
     ],
-    phase: "Phase I — ships with Blumont OS",
+    phase: "Phase I · ships with Blumont OS",
   },
   {
     icon: "copilot",
     title: "Front-Desk Copilot",
-    line: "Plain-language answers for any staff member, drawn from live property data.",
+    line: "Any staff member can ask a plain-language question and get an answer from live property data.",
     detail:
-      "A sidebar inside the PMS where any staff member asks operational questions in plain language and gets a straight answer from the live property database — inexpensive to build on the existing stack.",
+      "A sidebar inside the PMS for operational questions in everyday language, answered from the live property database. Relatively inexpensive to build on the stack you already have.",
     bullets: [
-      "\"Who's arriving after 10pm tonight?\" · \"Which rooms have open tickets older than two days?\"",
-      "Flattens the training curve for new hires and rotating FM staff",
+      "\"Who's arriving after 10pm tonight?\" or \"Which rooms have open tickets older than two days?\"",
+      "Makes onboarding easier for new hires and rotating FM staff",
     ],
-    phase: "Phase I — ships with Blumont OS",
+    phase: "Phase I · ships with Blumont OS",
   },
   {
     icon: "pricing",
     title: "Dynamic Pricing",
-    line: "Rates adjust by room, date, and demand through an established RM engine.",
+    line: "Rates move with room type, date, and demand through an established revenue-management engine.",
     detail:
-      "Rates adjust per room type and date from booking pace, local events, competitor positioning, and day-of-week patterns. A single property this size cannot train pricing models from scratch — the path is integrating an established revenue-management engine, not building one.",
+      "Rates adjust from booking pace, local events, competitor positioning, and day-of-week patterns. A property this size can't train pricing models from scratch. The practical path is plugging in an established RM engine, not building one.",
     bullets: [
       "Connected to Blumont OS inventory and reservation data",
       "Delivers the demand-based pricing commitment from the main proposal",
     ],
-    phase: "Phase II — integration",
+    phase: "Phase II · integration",
   },
   {
     icon: "report",
     title: "Owner Reporting",
-    line: "Monthly narrative drafted from the data — the GM reviews before ownership sees it.",
+    line: "The monthly narrative is drafted from the data. The GM reviews it before ownership sees anything.",
     detail:
-      "The monthly ownership report writes itself from the month's operating data — occupancy drivers, ADR movement, items flagged for owner attention — in plain language, not just numbers in a spreadsheet.",
+      "The ownership report largely writes itself from the month's operating data: what drove occupancy, how ADR moved, what needs owner attention. Plain language, not just numbers in a spreadsheet.",
     bullets: [
       "Example: \"Occupancy rose six points on corporate extended stays; ADR softened mid-month after ADIPEC\"",
-      "Among the most demonstrable features for ownership in the entire plan",
+      "One of the easiest features to show ownership in a walkthrough",
     ],
-    phase: "Phase I — ships with Blumont OS",
+    phase: "Phase I · ships with Blumont OS",
   },
   {
     icon: "forecast",
     title: "Ops Forecasting",
-    line: "Housekeeping queues and staffing rosters follow predicted demand, not static lists.",
+    line: "Housekeeping queues and staffing rosters follow predicted demand, not a fixed list.",
     detail:
-      "Predicted checkout times sequence the cleaning queue dynamically. Pattern detection across maintenance tickets surfaces replace-not-patch decisions. Occupancy forecasts two to four weeks out drive housekeeping rosters against the largest controllable cost line in the budget.",
+      "Predicted checkout times reorder the cleaning queue. Repeat maintenance tickets surface replace-not-patch calls. Occupancy forecasts two to four weeks out help match labour to demand, which is the largest controllable cost in the budget.",
     bullets: [
       "Housekeeping: room ready when the guest lands, not at a fixed 2pm",
       "Maintenance: three AC tickets in sixty days means replace the unit",
       "Staffing: labour matched to demand rather than a fixed schedule",
     ],
-    phase: "Phase III — after operating data",
+    phase: "Phase III · after operating data",
   },
 ];
 
@@ -185,7 +185,7 @@ export default function IntelCapabilityGrid() {
 
   return (
     <>
-      <p className="intel-grid-hint">Click any capability for detail</p>
+      <p className="intel-grid-hint">Click any card to read more</p>
       <div className="intel-grid">
         {capabilities.map((item, i) => (
           <button

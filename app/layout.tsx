@@ -16,7 +16,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Blumont Capital Tower — A Proposal by REOM Homes",
+  title: "Blumont Capital Tower · A Proposal by REOM Homes",
   description:
     "Repositioning Blumont Capital Tower into Abu Dhabi's next-generation serviced residence. A management proposal by REOM Homes Real Estate L.L.C.",
 };

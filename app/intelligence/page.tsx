@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import IntelCapabilityGrid from "../components/IntelCapabilityGrid";
 
 export const metadata: Metadata = {
-  title: "The Intelligence Layer — Blumont Capital Tower",
+  title: "The Intelligence Layer · Blumont Capital Tower",
   description:
-    "How Blumont OS uses AI for speed — answers, routing, pricing, and reports — while hospitality stays human.",
+    "How Blumont OS uses AI for answers, routing, pricing, and reports, while hospitality stays human.",
 };
 
 type IconName = "avoid";
@@ -28,8 +29,6 @@ function Icon({ name }: { name: IconName }) {
   }
 }
 
-import IntelCapabilityGrid from "../components/IntelCapabilityGrid";
-
 const skip = [
   {
     title: "Voice AI on the phone",
@@ -37,7 +36,7 @@ const skip = [
   },
   {
     title: "In-room voice assistants",
-    text: "Privacy concern at this tier — most guests unplug them within a day.",
+    text: "At this tier, privacy matters. Most guests unplug them within a day.",
   },
   {
     title: "Facial-recognition check-in",
@@ -80,8 +79,8 @@ export default function Intelligence() {
           </h1>
           <p className="lede">
             Blumont OS already runs on one data spine. AI sits on top to answer,
-            route, price, and report — while every arrival, problem, and judgment
-            call stays with a person.
+            route, price, and report. Every arrival, problem, and judgment call
+            still belongs to a person.
           </p>
         </div>
       </header>
@@ -145,8 +144,8 @@ export default function Intelligence() {
       <div className="intel-close">
         <div className="wrap">
           <p>
-            Nothing here replaces what is already proposed — it makes the same
-            commitments faster to deliver.
+            Nothing here replaces what is already proposed. It just makes the
+            same commitments faster to deliver.
           </p>
           <a className="btn btn-solid" href="/#contact">
             Back to Next Steps
@@ -158,7 +157,7 @@ export default function Intelligence() {
         <div className="wrap foot-inner">
           <span className="label">REOM Homes Real Estate L.L.C.</span>
           <span className="fine">
-            Blumont Capital Tower — The Intelligence Layer · Abu Dhabi · 2026
+            Blumont Capital Tower · The Intelligence Layer · Abu Dhabi · 2026
           </span>
         </div>
       </footer>

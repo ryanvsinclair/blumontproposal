@@ -147,7 +147,7 @@ const pillars: Pillar[] = [
       "Onboarding across Booking.com, Expedia, and Airbnb, plus Bayut, Dubizzle, and Property Finder for the local market",
       "Real-time visibility over inventory, reservations, rates, and revenue performance",
     ],
-    note: "A dedicated property website, professional email infrastructure, and centralized guest communication channels support the distribution strategy and strengthen brand credibility.",
+    note: "A property website, professional email, and centralized guest communication support distribution and strengthen brand credibility.",
     demo: { href: "/reservations", label: "Preview the reservation demo" },
   },
   {
@@ -166,12 +166,12 @@ const pillars: Pillar[] = [
     title: "Facilities & Staffing",
     icon: "facilities",
     bullets: [
-      "Professional facilities management structure through established partners — Abu Dhabi National Hotels or National Catering Company",
+      "Facilities management through established partners such as Abu Dhabi National Hotels or National Catering Company",
       "24/7 reception, security, and maintenance coverage wherever operationally required",
       "Dedicated maintenance technicians with preventive scheduling and quarterly facade and window cleaning",
       "Guest requests triaged and routed to the right department automatically, each with an SLA timer",
     ],
-    note: "Final staffing structure and payroll are presented to ownership for approval before mobilization, and ownership is welcome to request competing quotes from alternative providers before a partner is confirmed.",
+    note: "Final staffing and payroll go to ownership for approval before mobilization. You're welcome to request competing quotes before a partner is confirmed.",
   },
   {
     num: "IV",
@@ -182,7 +182,7 @@ const pillars: Pillar[] = [
       "Lobby and reception transformation into a modern, welcoming arrival experience",
       "Phased premium room program adding kitchenettes to selected units for the extended-stay market",
     ],
-    note: "Capital items are owner-funded, budgeted and approved separately from operating revenue, and sequenced so investment follows occupancy stabilization — never ahead of it.",
+    note: "Capital items are owner-funded and approved separately from operating revenue. Investment is sequenced to follow occupancy stabilization, never ahead of it.",
   },
   {
     num: "V",
@@ -191,7 +191,7 @@ const pillars: Pillar[] = [
     bullets: [
       "Comprehensive hygiene and environmental health program across guest rooms and common areas",
       "Fully operational, monitored CCTV coverage throughout the property",
-      "Proactive review management — engaging past guests, addressing concerns, and rebuilding platform ratings",
+      "Proactive review management: engaging past guests, addressing concerns, and rebuilding platform ratings",
     ],
     note: "Scent diffusion in the lobby and common areas reinforces a consistently fresh, premium guest environment, while ongoing reputation management ensures the property's online presence reflects the quality of service being delivered.",
   },
@@ -201,7 +201,7 @@ const pillars: Pillar[] = [
     icon: "reporting",
     bullets: [
       "Dedicated on-site General Manager with direct oversight of all property functions",
-      "Monthly operating report: occupancy, ADR, RevPAR, gross revenue, GOP, leasing status, and guest satisfaction — narrative drafted automatically, reviewed by the GM before it reaches ownership",
+      "Monthly operating report covering occupancy, ADR, RevPAR, gross revenue, GOP, leasing status, and guest satisfaction. The narrative is drafted automatically and reviewed by the GM before it reaches ownership",
       "Semi-annual business review ahead of each incentive fee calculation",
     ],
     note: "Performance is tracked against occupancy and ADR targets agreed with ownership, and ownership retains the right to request an independent review of the figures at any time.",
@@ -388,7 +388,7 @@ export default function Home() {
       <nav>
         <div className="nav-inner">
           <a className="nav-brand" href="#top">
-            Blumont Capital Tower <span>— REOM Homes</span>
+            Blumont Capital Tower <span>· REOM Homes</span>
           </a>
           <div className="nav-links">
             <a href="#opportunity">Opportunity</a>
@@ -424,7 +424,7 @@ export default function Home() {
             Capital Tower
           </h1>
           <p className="positioning reveal">
-            Repositioning Blumont Capital Tower into Abu Dhabi&apos;s
+            Repositioning Blumont Capital Tower as Abu Dhabi&apos;s
             next-generation serviced residence.
           </p>
           <div className="hero-foot">
@@ -438,22 +438,22 @@ export default function Home() {
       <section id="opportunity">
         <div className="wrap">
           <div className="section-head reveal">
-            <span className="label">01 — The Opportunity</span>
-            <h2>From underutilized asset to hospitality destination</h2>
+            <span className="label">01 · The Opportunity</span>
+            <h2>From underused asset to hospitality destination</h2>
           </div>
           <div className="split reveal">
             <p className="lede">
-              Blumont Capital Tower holds untapped potential — vacant
-              commercial space, inconsistent guest experience, and revenue left
-              unrealized.
+              Blumont Capital Tower has more room to grow than it&apos;s using
+              today: vacant commercial space, an inconsistent guest experience,
+              and revenue still on the table.
             </p>
             <div className="support">
               <p>
-                Under professional management, the tower becomes a fully
-                activated hospitality asset: every unit dynamically priced and
-                distributed across global booking channels, every commercial
-                space leased and generating income, and every guest touchpoint
-                operating to a serviced-residence standard.
+                With professional management, the tower becomes a fully
+                activated hospitality asset. Every unit is dynamically priced and
+                distributed across global booking channels. Every commercial
+                space is leased and generating income. Every guest touchpoint
+                runs to a serviced-residence standard.
               </p>
             </div>
           </div>
@@ -464,7 +464,7 @@ export default function Home() {
       <section id="strategy">
         <div className="wrap">
           <div className="section-head reveal">
-            <span className="label">02 — The Strategy</span>
+            <span className="label">02 · The Strategy</span>
             <h2>Six pillars of the operating plan</h2>
           </div>
         </div>
@@ -479,17 +479,16 @@ export default function Home() {
           <span className="label">Interactive Demos</span>
           <h2>A preview of what we&apos;d build</h2>
           <p className="demo-sub">
-            Rather than only describe the technology, we built working demos
-            so it can be experienced firsthand.
+            We didn&apos;t just write about the technology. We built working
+            demos you can click through yourself.
           </p>
           <div className="demo-cards">
             <div className="demo-card">
-              <span className="label">01 — For the Guest</span>
+              <span className="label">01 · For the Guest</span>
               <h3>The reservation experience</h3>
               <p>
-                Select dates, choose a residence, and confirm a stay — a
-                working demo of what a guest of Blumont Capital Tower would
-                see.
+                Pick dates, choose a residence, and confirm a stay. This is the
+                booking flow a guest of Blumont Capital Tower would see.
               </p>
               <a
                 className="btn btn-bronze"
@@ -501,12 +500,12 @@ export default function Home() {
               </a>
             </div>
             <div className="demo-card">
-              <span className="label">02 — For the Property</span>
+              <span className="label">02 · For the Property</span>
               <h3>The operating system</h3>
               <p>
-                Front desk, housekeeping, and the guest app in one synced demo
-                view — a guided two-minute walkthrough follows one guest from
-                booking to checkout.
+                Front desk, housekeeping, and the guest app in one synced view.
+                A two-minute walkthrough follows one guest from booking to
+                checkout.
               </p>
               <a
                 className="btn btn-bronze"
@@ -518,11 +517,11 @@ export default function Home() {
               </a>
             </div>
             <div className="demo-card">
-              <span className="label">03 — For Ownership</span>
+              <span className="label">03 · For Ownership</span>
               <h3>The intelligence layer</h3>
               <p>
                 How AI supports concierge, triage, pricing, and owner reporting
-                on top of Blumont OS — and what we deliberately leave out.
+                on top of Blumont OS, and what we deliberately leave out.
               </p>
               <a className="btn btn-bronze" href="/intelligence">
                 Read the Intelligence Brief
@@ -530,9 +529,9 @@ export default function Home() {
             </div>
           </div>
           <p className="demo-disclaimer">
-            The reservation and OS demos are interactive prototypes built to
-            demonstrate the approach — not the final, Blumont-branded systems,
-            which would be configured and deployed during mobilization.
+            The reservation and OS demos are prototypes built to show our
+            approach. The final Blumont-branded systems would be configured
+            during mobilization.
           </p>
         </div>
       </section>
@@ -544,7 +543,7 @@ export default function Home() {
           <p>
             The vision is clear.
             <br />
-            Here is how we deliver it.
+            Here&apos;s how we deliver it.
           </p>
         </div>
       </div>
@@ -554,7 +553,7 @@ export default function Home() {
         <section id="timeline">
           <div className="wrap">
             <div className="section-head reveal">
-              <span className="label">03 — Implementation</span>
+              <span className="label">03 · Implementation</span>
               <h2>Four phases, revenue first</h2>
             </div>
             <div className="timeline reveal">
@@ -577,7 +576,7 @@ export default function Home() {
         <div className="glance-strip" id="glance">
           <div className="wrap">
             <span className="label glance-strip-label reveal">
-              Before the Details — The Deal in Brief
+              Before the Details · The Deal in Brief
             </span>
             <div className="stats reveal">
               <div className="stat">
@@ -604,7 +603,7 @@ export default function Home() {
         <section id="fees">
           <div className="wrap">
             <div className="section-head reveal">
-              <span className="label">04 — Commercial Terms</span>
+              <span className="label">04 · Commercial Terms</span>
               <h2>Success, directly linked</h2>
             </div>
             <div className="fees reveal">
@@ -625,7 +624,7 @@ export default function Home() {
                   of gross operating profit, semi-annually
                 </span>
                 <p className="fee-plain">
-                  Earned only on delivered profitability — REOM Homes&apos;
+                  Earned only on delivered profitability. REOM Homes&apos;
                   return is tied to the operating result achieved for
                   ownership.
                 </p>
@@ -638,7 +637,7 @@ export default function Home() {
               </p>
               <p>
                 <a href={PROPOSAL_DOC} download>
-                  Request full commercial terms — complete proposal document
+                  Request full commercial terms (complete proposal document)
                 </a>
               </p>
             </div>
@@ -649,7 +648,7 @@ export default function Home() {
         <section id="accountability">
           <div className="wrap">
             <div className="section-head reveal">
-              <span className="label">05 — Accountability</span>
+              <span className="label">05 · Accountability</span>
               <h2>Oversight you can see</h2>
             </div>
             <div className="acct reveal">
@@ -657,10 +656,10 @@ export default function Home() {
                 <span className="label">On-Site Leadership</span>
                 <h3>A General Manager in the building</h3>
                 <p>
-                  Key members of REOM Homes&apos; management team work directly
-                  from Blumont Capital Tower — direct supervision of daily
-                  operations, immediate response, and a single point of contact
-                  for ownership.
+                  Key members of REOM Homes&apos; management team work from
+                  Blumont Capital Tower: direct supervision of daily operations,
+                  immediate response, and a single point of contact for
+                  ownership.
                 </p>
               </div>
               <div className="acct-item">
@@ -668,7 +667,7 @@ export default function Home() {
                 <h3>Monthly reports, semi-annual reviews</h3>
                 <p>
                   A monthly operating report covers occupancy, ADR, RevPAR,
-                  revenue, GOP, leasing, maintenance, and guest satisfaction —
+                  revenue, GOP, leasing, maintenance, and guest satisfaction,
                   with a full business review every six months.
                 </p>
               </div>
@@ -692,13 +691,13 @@ export default function Home() {
             <span className="label">Next Steps</span>
             <h2>See the tower with us</h2>
             <p className="cta-sub">
-              Schedule a walkthrough with the REOM Homes team to review the
-              property and confirm the operating targets together.
+              Book a walkthrough with the REOM Homes team to see the property
+              and agree on operating targets together.
             </p>
             <div className="btn-row">
               <a
                 className="btn btn-solid"
-                href="mailto:info@reomhomes.ae?subject=Blumont%20Capital%20Tower%20%E2%80%94%20Walkthrough"
+                href="mailto:info@reomhomes.ae?subject=Blumont%20Capital%20Tower%20Walkthrough"
               >
                 Schedule a Walkthrough
               </a>
@@ -714,7 +713,7 @@ export default function Home() {
         <div className="wrap foot-inner">
           <span className="label">REOM Homes Real Estate L.L.C.</span>
           <span className="fine">
-            Blumont Capital Tower — Property Management &amp; Operational
+            Blumont Capital Tower · Property Management &amp; Operational
             Enhancement Proposal · Abu Dhabi · 2026
           </span>
         </div>
