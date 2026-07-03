@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 const PROPOSAL_DOC = "/Blumont-Capital-Tower-Proposal.docx";
 
@@ -23,9 +24,114 @@ function Reveal() {
   return null;
 }
 
+function ScrollProgress() {
+  const barRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    let ticking = false;
+    const update = () => {
+      const scrollable =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+      if (barRef.current) {
+        barRef.current.style.width = `${Math.min(100, Math.max(0, pct))}%`;
+      }
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+  return (
+    <div className="nav-progress" aria-hidden="true">
+      <div className="nav-progress-bar" ref={barRef} />
+    </div>
+  );
+}
+
+type PillarIcon =
+  | "revenue"
+  | "leasing"
+  | "facilities"
+  | "enhancement"
+  | "safety"
+  | "reporting";
+
+function PillarGlyph({ name }: { name: PillarIcon }) {
+  const common = {
+    viewBox: "0 0 32 32",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.2,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+  switch (name) {
+    case "revenue":
+      return (
+        <svg {...common}>
+          <path d="M5 26h22" />
+          <rect x="7" y="19" width="4" height="7" />
+          <rect x="14" y="14" width="4" height="12" />
+          <rect x="21" y="8" width="4" height="18" />
+        </svg>
+      );
+    case "leasing":
+      return (
+        <svg {...common}>
+          <path d="M5 12L16 5l11 7" />
+          <rect x="8" y="12" width="16" height="14" rx="1" />
+          <rect x="14" y="18" width="4" height="8" />
+          <path d="M11.5 15.5h2M18.5 15.5h2" />
+        </svg>
+      );
+    case "facilities":
+      return (
+        <svg {...common}>
+          <circle cx="16" cy="16" r="10.5" />
+          <path d="M16 10v6l4.5 3" />
+        </svg>
+      );
+    case "enhancement":
+      return (
+        <svg {...common}>
+          <rect x="6" y="6" width="20" height="20" rx="2" />
+          <path d="M11 20l4.5-5 3 3 5.5-6.5" />
+          <path d="M19 10.5h5v5" />
+        </svg>
+      );
+    case "safety":
+      return (
+        <svg {...common}>
+          <path d="M16 5l9 3.5v6.5c0 6.2-3.9 10.3-9 11.8-5.1-1.5-9-5.6-9-11.8V8.5L16 5z" />
+          <path d="M11.8 16.3l3 3 6-6.6" />
+        </svg>
+      );
+    case "reporting":
+      return (
+        <svg {...common}>
+          <rect x="8" y="4" width="16" height="24" rx="1.2" />
+          <path d="M12 10.5h8" />
+          <path d="M12 15.5h5" />
+          <path d="M12.5 20.5l2 2 4-4.5" />
+        </svg>
+      );
+  }
+}
+
 type Pillar = {
   num: string;
   title: string;
+  icon: PillarIcon;
   bullets: string[];
   note: string;
   demo?: { href: string; label: string };
@@ -35,37 +141,42 @@ const pillars: Pillar[] = [
   {
     num: "I",
     title: "Revenue & Distribution",
+    icon: "revenue",
     bullets: [
       "Central Reservation System with dynamic pricing that adjusts rates to demand, seasonality, events, and competitor positioning",
       "Onboarding across Booking.com, Expedia, and Airbnb, plus Bayut, Dubizzle, and Property Finder for the local market",
       "Real-time visibility over inventory, reservations, rates, and revenue performance",
     ],
-    note: "A dedicated property website, professional email infrastructure, and centralized guest communication channels support the distribution strategy and strengthen brand credibility. Marketing remains a primary focus throughout the management period to sustain visibility and occupancy.",
-    demo: { href: "/reservations", label: "Preview the reservation experience" },
+    note: "A dedicated property website, professional email infrastructure, and centralized guest communication channels support the distribution strategy and strengthen brand credibility.",
+    demo: { href: "/reservations", label: "Preview the reservation demo" },
   },
   {
     num: "II",
     title: "Commercial Leasing",
+    icon: "leasing",
     bullets: [
       "Immediate marketing and leasing of all vacant commercial and retail spaces upon commencement",
       "A new net revenue stream directed to ownership, with a defined share reinvested into property enhancements",
       "Increased footfall and a more vibrant, professionally operated environment",
     ],
-    note: "A fully occupied commercial component elevates the property's image and activity from day one, while leasing income helps fund lobby, lighting, and guest-environment improvements without drawing on room revenue.",
+    note: "Leasing income helps fund lobby, lighting, and guest-environment improvements without drawing on room revenue.",
   },
   {
     num: "III",
     title: "Facilities & Staffing",
+    icon: "facilities",
     bullets: [
       "Professional facilities management structure through established partners — Abu Dhabi National Hotels or National Catering Company",
       "24/7 reception, security, and maintenance coverage wherever operationally required",
       "Dedicated maintenance technicians with preventive scheduling and quarterly facade and window cleaning",
+      "Guest requests triaged and routed to the right department automatically, each with an SLA timer",
     ],
     note: "Final staffing structure and payroll are presented to ownership for approval before mobilization, and ownership is welcome to request competing quotes from alternative providers before a partner is confirmed.",
   },
   {
     num: "IV",
     title: "Asset Enhancement",
+    icon: "enhancement",
     bullets: [
       "Lighting upgrades across parking, elevator lobbies, corridors, and reception areas",
       "Lobby and reception transformation into a modern, welcoming arrival experience",
@@ -76,6 +187,7 @@ const pillars: Pillar[] = [
   {
     num: "V",
     title: "Health, Safety & Reputation",
+    icon: "safety",
     bullets: [
       "Comprehensive hygiene and environmental health program across guest rooms and common areas",
       "Fully operational, monitored CCTV coverage throughout the property",
@@ -86,13 +198,14 @@ const pillars: Pillar[] = [
   {
     num: "VI",
     title: "Reporting & Accountability",
+    icon: "reporting",
     bullets: [
       "Dedicated on-site General Manager with direct oversight of all property functions",
-      "Monthly operating report: occupancy, ADR, RevPAR, gross revenue, GOP, leasing status, and guest satisfaction",
+      "Monthly operating report: occupancy, ADR, RevPAR, gross revenue, GOP, leasing status, and guest satisfaction — narrative drafted automatically, reviewed by the GM before it reaches ownership",
       "Semi-annual business review ahead of each incentive fee calculation",
     ],
     note: "Performance is tracked against occupancy and ADR targets agreed with ownership, and ownership retains the right to request an independent review of the figures at any time.",
-    demo: { href: "/demo", label: "See the operating system live" },
+    demo: { href: "/demo", label: "See a live demo of the operating system" },
   },
 ];
 
@@ -138,7 +251,136 @@ const phases = [
   },
 ];
 
+function PillarGallery({ pillars }: { pillars: Pillar[] }) {
+  const [active, setActive] = useState(0);
+  const current = pillars[active];
+  const go = (i: number) => setActive((i + pillars.length) % pillars.length);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    tabRefs.current[active]?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
+  }, [active]);
+
+  return (
+    <div className="pillar-gallery">
+      <div className="pillar-rail">
+        {pillars.map((pillar, i) => (
+          <button
+            key={pillar.num}
+            ref={(el) => {
+              tabRefs.current[i] = el;
+            }}
+            className={`pillar-tab${i === active ? " active" : ""}`}
+            onClick={() => setActive(i)}
+            type="button"
+          >
+            <span className="pillar-tab-icon">
+              <PillarGlyph name={pillar.icon} />
+            </span>
+            <span className="pillar-tab-text">
+              <span className="p-num">{pillar.num}</span>
+              <span className="p-title">{pillar.title}</span>
+            </span>
+          </button>
+        ))}
+      </div>
+
+      <div className="pillar-stage">
+        <span className="pillar-ghost-num" aria-hidden="true">
+          {current.num}
+        </span>
+        <div className="pillar-stage-content" key={current.num}>
+          <div className="pillar-stage-icon">
+            <PillarGlyph name={current.icon} />
+          </div>
+          <span className="label pillar-count">
+            Pillar {active + 1} of {pillars.length}
+          </span>
+          <h3>{current.title}</h3>
+          <ul>
+            {current.bullets.map((bullet) => (
+              <li key={bullet}>{bullet}</li>
+            ))}
+          </ul>
+          <p className="expanded-note">{current.note}</p>
+          {current.demo && (
+            <a
+              className="demo-link"
+              href={current.demo.href}
+              target="_blank"
+              rel="noopener"
+            >
+              {current.demo.label} →
+            </a>
+          )}
+        </div>
+
+        <div className="pillar-nav">
+          <button
+            className="pillar-arrow"
+            onClick={() => go(active - 1)}
+            aria-label="Previous pillar"
+            type="button"
+          >
+            ←
+          </button>
+          <div className="pillar-dots">
+            {pillars.map((pillar, i) => (
+              <button
+                key={pillar.num}
+                className={`pillar-dot${i === active ? " active" : ""}`}
+                onClick={() => setActive(i)}
+                aria-label={`Go to ${pillar.title}`}
+                type="button"
+              />
+            ))}
+          </div>
+          <button
+            className="pillar-arrow"
+            onClick={() => go(active + 1)}
+            aria-label="Next pillar"
+            type="button"
+          >
+            →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
+  const heroImgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    let ticking = false;
+    const update = () => {
+      if (heroImgRef.current) {
+        const offset = Math.min(window.scrollY * 0.15, 70);
+        heroImgRef.current.style.transform = `scale(1.12) translate3d(0, ${offset}px, 0)`;
+      }
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <>
       <Reveal />
@@ -149,7 +391,6 @@ export default function Home() {
             Blumont Capital Tower <span>— REOM Homes</span>
           </a>
           <div className="nav-links">
-            <a href="#glance">Overview</a>
             <a href="#opportunity">Opportunity</a>
             <a href="#strategy">Strategy</a>
             <a href="#timeline">Timeline</a>
@@ -158,10 +399,21 @@ export default function Home() {
             <a href="#contact">Contact</a>
           </div>
         </div>
+        <ScrollProgress />
       </nav>
 
       {/* ================= HERO ================= */}
       <header className="hero" id="top">
+        <div className="hero-media">
+          <Image
+            ref={heroImgRef}
+            src="/images/blumont-tower-hd.png"
+            alt="Blumont Capital Tower, Abu Dhabi"
+            fill
+            priority
+            sizes="100vw"
+          />
+        </div>
         <div className="wrap">
           <span className="label reveal">
             A Proposal by REOM Homes Real Estate L.L.C.
@@ -175,65 +427,18 @@ export default function Home() {
             Repositioning Blumont Capital Tower into Abu Dhabi&apos;s
             next-generation serviced residence.
           </p>
-        </div>
-        <div className="hero-foot">
-          <span className="label">Abu Dhabi, U.A.E.</span>
-          <span className="label">June 2026</span>
+          <div className="hero-foot">
+            <span className="label">Abu Dhabi, U.A.E.</span>
+            <span className="label">June 2026</span>
+          </div>
         </div>
       </header>
-
-      {/* ================= AT A GLANCE ================= */}
-      <section id="glance">
-        <div className="wrap">
-          <div className="section-head reveal">
-            <span className="label">01 — At a Glance</span>
-            <h2>A performance-based partnership</h2>
-          </div>
-          <div className="stats reveal">
-            <div className="stat">
-              <span className="label stat-label">Base Fee</span>
-              <span className="num">
-                10<span className="pct">%</span>
-              </span>
-              <span className="desc">
-                of gross revenue — management aligned with top-line growth
-              </span>
-            </div>
-            <div className="stat">
-              <span className="label stat-label">Incentive Fee</span>
-              <span className="num">
-                6<span className="pct">%</span>
-              </span>
-              <span className="desc">
-                of gross operating profit — paid only on delivered
-                profitability
-              </span>
-            </div>
-            <div className="stat">
-              <span className="label stat-label">Implementation</span>
-              <span className="num">4</span>
-              <span className="desc">
-                phases, sequenced to stabilize revenue before capital
-                investment
-              </span>
-            </div>
-            <div className="stat">
-              <span className="label stat-label">Operations</span>
-              <span className="num">24/7</span>
-              <span className="desc">
-                on-site management, reception, security, and maintenance
-                coverage
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ================= OPPORTUNITY ================= */}
       <section id="opportunity">
         <div className="wrap">
           <div className="section-head reveal">
-            <span className="label">02 — The Opportunity</span>
+            <span className="label">01 — The Opportunity</span>
             <h2>From underutilized asset to hospitality destination</h2>
           </div>
           <div className="split reveal">
@@ -250,12 +455,6 @@ export default function Home() {
                 space leased and generating income, and every guest touchpoint
                 operating to a serviced-residence standard.
               </p>
-              <p>
-                REOM Homes proposes a complete operating framework — revenue
-                systems, on-site teams, asset enhancement, and transparent
-                reporting — designed to reposition the property as a leading
-                extended-stay destination in Abu Dhabi.
-              </p>
             </div>
           </div>
         </div>
@@ -265,61 +464,32 @@ export default function Home() {
       <section id="strategy">
         <div className="wrap">
           <div className="section-head reveal">
-            <span className="label">03 — The Strategy</span>
+            <span className="label">02 — The Strategy</span>
             <h2>Six pillars of the operating plan</h2>
           </div>
-          <div className="pillars reveal">
-            {pillars.map((pillar) => (
-              <details key={pillar.num}>
-                <summary>
-                  <span className="p-num">{pillar.num}</span>
-                  <h3>{pillar.title}</h3>
-                  <span className="toggle">+</span>
-                </summary>
-                <div className="pillar-body">
-                  <div>
-                    <ul>
-                      {pillar.bullets.map((bullet) => (
-                        <li key={bullet}>{bullet}</li>
-                      ))}
-                    </ul>
-                    <p className="expanded-note">{pillar.note}</p>
-                    {pillar.demo && (
-                      <a
-                        className="demo-link"
-                        href={pillar.demo.href}
-                        target="_blank"
-                        rel="noopener"
-                      >
-                        {pillar.demo.label} →
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </details>
-            ))}
-          </div>
+        </div>
+        <div className="wrap reveal">
+          <PillarGallery pillars={pillars} />
         </div>
       </section>
 
       {/* ================= WORKING PREVIEWS ================= */}
       <section className="demo-band" id="preview">
         <div className="wrap reveal">
-          <span className="label">Working Previews</span>
-          <h2>The systems, already built</h2>
+          <span className="label">Interactive Demos</span>
+          <h2>A preview of what we&apos;d build</h2>
           <p className="demo-sub">
-            Rather than describe the technology behind the operating plan, we
-            built it. Two live previews — the guest-facing reservation
-            experience, and the operating system that runs the property behind
-            it.
+            Rather than only describe the technology, we built working demos
+            so it can be experienced firsthand.
           </p>
           <div className="demo-cards">
             <div className="demo-card">
               <span className="label">01 — For the Guest</span>
               <h3>The reservation experience</h3>
               <p>
-                Select dates, choose a residence, and confirm a stay — exactly
-                as a guest of Blumont Capital Tower would.
+                Select dates, choose a residence, and confirm a stay — a
+                working demo of what a guest of Blumont Capital Tower would
+                see.
               </p>
               <a
                 className="btn btn-bronze"
@@ -327,16 +497,16 @@ export default function Home() {
                 target="_blank"
                 rel="noopener"
               >
-                Preview the Reservation System
+                Preview the Reservation Demo
               </a>
             </div>
             <div className="demo-card">
               <span className="label">02 — For the Property</span>
               <h3>The operating system</h3>
               <p>
-                Front desk, housekeeping, and the guest app in one live view —
-                a guided two-minute walkthrough follows one guest from booking
-                to checkout.
+                Front desk, housekeeping, and the guest app in one synced demo
+                view — a guided two-minute walkthrough follows one guest from
+                booking to checkout.
               </p>
               <a
                 className="btn btn-bronze"
@@ -344,10 +514,15 @@ export default function Home() {
                 target="_blank"
                 rel="noopener"
               >
-                Walk Through the Live Demo
+                Walk Through the Demo
               </a>
             </div>
           </div>
+          <p className="demo-disclaimer">
+            Both are interactive prototypes built to demonstrate the approach
+            — not the final, Blumont-branded systems, which would be
+            configured and deployed during mobilization.
+          </p>
         </div>
       </section>
 
@@ -368,7 +543,7 @@ export default function Home() {
         <section id="timeline">
           <div className="wrap">
             <div className="section-head reveal">
-              <span className="label">04 — Implementation</span>
+              <span className="label">03 — Implementation</span>
               <h2>Four phases, revenue first</h2>
             </div>
             <div className="timeline reveal">
@@ -387,11 +562,38 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ================= TERMS AT A GLANCE (lead-in to Fees) ================= */}
+        <div className="glance-strip" id="glance">
+          <div className="wrap">
+            <span className="label glance-strip-label reveal">
+              Before the Details — The Deal in Brief
+            </span>
+            <div className="stats reveal">
+              <div className="stat">
+                <span className="label stat-label">Implementation</span>
+                <span className="num">4</span>
+                <span className="desc">
+                  phases, sequenced to stabilize revenue before capital
+                  investment
+                </span>
+              </div>
+              <div className="stat">
+                <span className="label stat-label">Operations</span>
+                <span className="num">24/7</span>
+                <span className="desc">
+                  on-site management, reception, security, and maintenance
+                  coverage
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* ================= FEES ================= */}
         <section id="fees">
           <div className="wrap">
             <div className="section-head reveal">
-              <span className="label">05 — Commercial Terms</span>
+              <span className="label">04 — Commercial Terms</span>
               <h2>Success, directly linked</h2>
             </div>
             <div className="fees reveal">
@@ -421,9 +623,7 @@ export default function Home() {
             <div className="fee-notes reveal">
               <p>
                 The fee structure is reviewed at the end of Year 1 against
-                actual occupancy and GOP performance. Estimated operational
-                staffing payroll is consolidated as a single line within the
-                operating budget presented to ownership.
+                actual occupancy and GOP performance.
               </p>
               <p>
                 <a href={PROPOSAL_DOC} download>
@@ -438,7 +638,7 @@ export default function Home() {
         <section id="accountability">
           <div className="wrap">
             <div className="section-head reveal">
-              <span className="label">06 — Accountability</span>
+              <span className="label">05 — Accountability</span>
               <h2>Oversight you can see</h2>
             </div>
             <div className="acct reveal">
@@ -471,6 +671,11 @@ export default function Home() {
                   welcome.
                 </p>
               </div>
+            </div>
+            <div className="reveal" style={{ marginTop: 44 }}>
+              <a href="/intelligence" className="demo-link">
+                How this reporting is kept fast and accurate behind the scenes →
+              </a>
             </div>
           </div>
         </section>

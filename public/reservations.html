@@ -102,6 +102,7 @@
   .rate.on .rate-name{color:var(--bronze)}
   .rate-price{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400}
   .rate-price small{font-family:'Jost',sans-serif;font-size:11px;color:var(--muted);font-weight:300}
+  .rate-policy{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:8px;line-height:1.55;max-width:16ch}
   .details-toggle{background:none;border:none;font-family:'Jost',sans-serif;font-weight:300;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--bronze);cursor:pointer;padding:0;margin-left:auto}
   .details-toggle:focus-visible{outline:1.5px solid var(--bronze);outline-offset:3px}
   .occ-flag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px dotted var(--line);padding:8px 14px}
@@ -229,7 +230,7 @@
     <div class="panel" id="p2">
       <div class="label">Step II — The residences</div>
       <h1 class="stage-title">Choose your residence</h1>
-      <p class="stage-sub">Residences are offered by category; your specific unit is assigned by our front office to honour the preferences you share at the next step. Rates are per night, inclusive of the 10% service charge.</p>
+      <p class="stage-sub">Residences are offered by category; your specific unit is assigned by our front office to honour the preferences you share at the next step. Rates are per night, inclusive of the 10% service charge — choose flexible or advance purchase according to your plans.</p>
 
       <div class="filter-bar" role="group" aria-label="Filter residences">
         <span class="label--muted label">View</span>
@@ -251,7 +252,7 @@
     <div class="panel" id="p3">
       <div class="label">Step III — Guest details</div>
       <h1 class="stage-title">May we take your details?</h1>
-      <p class="stage-sub">No payment is taken today. Your card guarantees the reservation; flexible rates may be cancelled without charge until 48 hours before arrival.</p>
+      <p class="stage-sub">No payment is taken today. Your card guarantees the reservation. Flexible rates may be cancelled without charge until 48 hours before arrival; advance purchase rates are non-refundable.</p>
 
       <form class="form-grid" id="guestForm" onsubmit="return confirmRes(event)">
         <div class="field"><label for="fn">First name</label><input id="fn" required autocomplete="given-name"></div>
@@ -350,6 +351,7 @@ const rooms=[
    rates:[{id:'flex',name:'Flexible',p:950},{id:'adv',name:'Advance purchase',p:855}]},
 ];
 const FEE_PER_NIGHT=15;
+const RATE_POLICY={flex:'Free cancellation until 48 h before arrival',adv:'Non-refundable · best available rate'};
 
 /* ------- state ------- */
 let inDay=null,outDay=null,guests=2,selRoom=null,selRate=null,selBed={},viewFilter='all',openDetails={},galleryIdx={},prefs=[];
@@ -436,6 +438,7 @@ function renderRooms(){
                 <button type="button" class="rate ${selRoom===r.id&&selRate===rt.id?'on':''}" data-room="${r.id}" data-rate="${rt.id}">
                   <div class="rate-name">${rt.name}</div>
                   <div class="rate-price serif">AED ${rt.p} <small>/ night</small></div>
+                  <div class="rate-policy">${RATE_POLICY[rt.id]}</div>
                 </button>`).join('')}
           </div>
         </div>

@@ -37,6 +37,18 @@ button:focus-visible{outline:2px solid var(--bronze);outline-offset:2px}
 .snav button:hover{color:#fff}
 .snav button.on{color:#fff;border-left-color:var(--bronze-soft);background:rgba(255,255,255,.05)}
 .snav .badge{background:var(--bronze-soft);color:var(--teal-deep);font-size:9px;font-weight:600;border-radius:9px;padding:1px 7px;margin-left:8px;vertical-align:1px}
+.snav button.locked{opacity:.32;cursor:not-allowed}
+.snav button.locked:hover{color:#9FBDB9}
+.role-switch{padding:0 20px 16px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:6px}
+.role-switch .rs-label{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#7FA39E;margin-bottom:8px;display:block}
+.role-switch button{display:block;width:100%;text-align:left;background:none;border:1px solid transparent;color:#9FBDB9;font-size:10.5px;letter-spacing:.04em;font-weight:400;padding:6px 9px;margin-bottom:3px;transition:all .2s}
+.role-switch button:hover{color:#fff}
+.role-switch button.on{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(196,169,125,.4)}
+
+/* staff-side toast (distinct from guest phone push) */
+.staff-toast{position:fixed;left:38%;bottom:76px;transform:translate(-50%,14px);background:var(--ink);color:var(--bone);font-size:12px;letter-spacing:.02em;padding:13px 22px;opacity:0;pointer-events:none;transition:all .3s ease;z-index:150;box-shadow:0 14px 34px rgba(0,0,0,.28);border-left:3px solid var(--bronze-soft);max-width:360px;text-align:center}
+.staff-toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:1080px){.staff-toast{left:50%}}
 
 .smain{padding:26px 30px;overflow-y:auto;max-height:calc(100vh - 120px)}
 .sview{display:none;animation:fade .35s ease both}
@@ -80,6 +92,47 @@ tr.hl{background:#FBF6EC}
 .rowbtn:disabled{opacity:.35;cursor:default}
 .rowbtn.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
 .rowbtn.primary:hover:not(:disabled){background:var(--teal-deep)}
+
+/* search + filters */
+.tools-row{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.search-input{flex:1;min-width:200px;border:1px solid var(--line);background:#fff;padding:11px 14px;font-size:13px;font-family:'Jost',sans-serif;font-weight:300;color:var(--ink)}
+.search-input::placeholder{color:var(--muted)}
+.filter-pills{display:flex;gap:6px;flex-wrap:wrap;padding:0 18px 16px}
+.filter-pill{border:1px solid var(--line);background:#fff;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:8px 13px;color:var(--muted);transition:all .2s}
+.filter-pill:hover{color:var(--ink)}
+.filter-pill.on{border-color:var(--teal);color:var(--teal);background:#EFF5F4}
+.no-results{padding:26px 18px;text-align:center;color:var(--muted);font-size:13px;font-style:italic}
+.gname-link{cursor:pointer;transition:color .2s}
+.gname-link:hover{color:var(--bronze)}
+
+/* guest directory */
+.guest-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(max-width:1300px){.guest-grid{grid-template-columns:1fr}}
+.guest-card{width:100%;font-family:inherit;text-align:left;background:var(--card);border:1px solid var(--line);padding:15px 17px;cursor:pointer;transition:all .2s;display:flex;gap:13px;align-items:flex-start}
+.guest-card:hover{border-color:var(--bronze)}
+.guest-av{width:38px;height:38px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:15px;flex-shrink:0}
+.guest-av.vip{background:var(--bronze)}
+.guest-info{flex:1;min-width:0}
+.guest-info .gname{font-weight:500;font-size:13.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.guest-info .gtag{font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--bronze);border:1px solid rgba(160,128,80,.4);padding:2px 7px}
+.guest-info .gline{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+
+/* generic modal card (guest profile / reservation detail) */
+.modal-card{background:var(--card);width:480px;max-width:92vw;padding:0;border-top:3px solid var(--teal);text-align:left;max-height:84vh;overflow-y:auto;position:relative}
+.modal-card .mhead{padding:28px 32px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--card)}
+.modal-card .mhead h3{font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:400}
+.modal-card .msub{font-size:11px;color:var(--muted);margin-top:5px;letter-spacing:.02em}
+.modal-x{position:absolute;top:22px;right:24px;background:none;border:none;font-size:20px;color:var(--muted);line-height:1;cursor:pointer;padding:4px}
+.modal-x:hover{color:var(--ink)}
+.modal-body{padding:22px 32px 30px}
+.profile-facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:18px}
+.profile-facts div{background:#fff;padding:11px 15px}
+.profile-facts .k{font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.profile-facts .v{font-size:13px;margin-top:3px}
+.pref-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.pref-tag{font-size:10px;letter-spacing:.04em;border:1px solid var(--line);padding:5px 11px;color:var(--ink)}
+.note-box{background:#FBF6EC;border-left:2px solid var(--bronze);padding:11px 15px;font-size:12px;line-height:1.65;color:#57534E;margin-bottom:18px;font-style:italic}
+.stay-hist-h{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 
 /* housekeeping board */
 .hk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:16px 18px}
@@ -203,6 +256,14 @@ tr.hl{background:#FBF6EC}
 .key-locked{text-align:center;color:var(--muted);font-size:12px;padding:60px 20px;font-style:italic;line-height:1.7}
 
 /* requests (guest) */
+.ask-box{display:flex;gap:8px;margin-bottom:14px}
+.ask-box input{flex:1;min-width:0;border:1px solid var(--line);background:#fff;padding:0 12px;font-size:12px;font-family:'Jost',sans-serif;color:var(--ink)}
+.ask-box input::placeholder{color:var(--muted)}
+.ask-box input:disabled{opacity:.5}
+.ask-box button{border:1px solid var(--ink);background:var(--ink);color:var(--bone);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:0 16px;transition:background .2s}
+.ask-box button:hover:not(:disabled){background:var(--bronze);border-color:var(--bronze)}
+.ask-box button:disabled{opacity:.4;cursor:default}
+.ask-hint{font-size:10px;color:var(--muted);margin:-6px 0 16px;letter-spacing:.02em}
 .req-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
 .req-opts button{border:1px solid var(--line);background:#fff;padding:16px 10px;font-size:11px;letter-spacing:.06em;transition:all .2s}
 .req-opts button:hover:not(:disabled){border-color:var(--bronze)}
@@ -270,12 +331,19 @@ tr.hl{background:#FBF6EC}
   <div class="staff">
     <nav class="snav">
       <div class="brand">Blumont<small>Front Desk</small></div>
-      <button class="on" id="navToday" onclick="sview('today',this)">Today</button>
-      <button onclick="sview('today',this)">Reservations</button>
-      <button id="navHK" onclick="sview('hk',this)">Housekeeping</button>
-      <button onclick="sview('req',this)" id="navReq">Requests<span class="badge" id="reqBadge" style="display:none">0</span></button>
-      <button onclick="sview('today',this)">Folios</button>
-      <button onclick="sview('today',this)">Reports</button>
+      <div class="role-switch">
+        <span class="rs-label">Viewing as</span>
+        <button class="on" data-role="frontdesk" onclick="setRole('frontdesk',this)">Front Desk</button>
+        <button data-role="housekeeping" onclick="setRole('housekeeping',this)">Housekeeping</button>
+        <button data-role="gm" onclick="setRole('gm',this)">General Manager</button>
+      </div>
+      <button class="on" id="navToday" data-view="today" onclick="sview('today',this)">Today</button>
+      <button data-view="res" onclick="sview('res',this)">Reservations</button>
+      <button data-view="guests" onclick="sview('guests',this)">Guests</button>
+      <button id="navHK" data-view="hk" onclick="sview('hk',this)">Housekeeping</button>
+      <button data-view="req" onclick="sview('req',this)" id="navReq">Requests<span class="badge" id="reqBadge" style="display:none">0</span></button>
+      <button data-view="today" onclick="sview('today',this)">Folios</button>
+      <button id="navReports" data-view="reports" onclick="sview('reports',this)">Reports</button>
     </nav>
 
     <div class="smain">
@@ -295,19 +363,19 @@ tr.hl{background:#FBF6EC}
             <thead><tr><th>Guest</th><th>Residence</th><th>Status</th><th></th></tr></thead>
             <tbody>
               <tr class="hl" id="rowLayla">
-                <td><div class="gname">Layla Haddad</div><div class="gsub">BLM-2026-4417 · 2 guests · 5 nights</div></td>
+                <td><div class="gname gname-link" onclick="openGuestProfile('haddad')">Layla Haddad</div><div class="gsub">BLM-2026-4417 · 2 guests · 5 nights</div></td>
                 <td><div>Premium Room</div><div class="gsub" id="roomAssign">Room 1406 · Gulf view</div></td>
                 <td id="laylaStatus"><span class="pill info" id="pillPre">Booked</span></td>
                 <td><button class="rowbtn" disabled id="laylaAct">Awaiting scan</button></td>
               </tr>
               <tr>
-                <td><div class="gname">Marcus Chen</div><div class="gsub">BLM-2026-4409 · 1 guest · 2 nights</div></td>
+                <td><div class="gname gname-link" onclick="openGuestProfile('chen')">Marcus Chen</div><div class="gsub">BLM-2026-4409 · 1 guest · 2 nights</div></td>
                 <td><div>Executive Suite</div><div class="gsub">Room 806 · City view</div></td>
                 <td><span class="pill grey">Booked</span></td>
                 <td><button class="rowbtn" disabled>Awaiting scan</button></td>
               </tr>
               <tr>
-                <td><div class="gname">Fatima Al Suwaidi</div><div class="gsub">BLM-2026-4421 · 3 guests · 7 nights</div></td>
+                <td><div class="gname gname-link" onclick="openGuestProfile('suwaidi')">Fatima Al Suwaidi</div><div class="gsub">BLM-2026-4421 · 3 guests · 7 nights</div></td>
                 <td><div>One-Bedroom Apartment</div><div class="gsub">Room 2203 · Gulf view</div></td>
                 <td><span class="pill info">Pre-checked</span></td>
                 <td><button class="rowbtn" disabled>Awaiting scan</button></td>
@@ -321,7 +389,7 @@ tr.hl{background:#FBF6EC}
           <table>
             <tbody>
               <tr id="rowLaylaDep" style="display:none">
-                <td><div class="gname">Layla Haddad</div><div class="gsub">Room 1406</div></td>
+                <td><div class="gname gname-link" onclick="openGuestProfile('haddad')">Layla Haddad</div><div class="gsub">Room 1406</div></td>
                 <td><span class="pill ok">Express checkout · paid</span></td>
                 <td style="text-align:right"><span class="gsub">Folio closed — key revoked</span></td>
               </tr>
@@ -329,6 +397,40 @@ tr.hl{background:#FBF6EC}
             </tbody>
           </table>
         </div>
+      </div>
+
+      <!-- RESERVATIONS -->
+      <div class="sview" id="v-res">
+        <div class="shead"><h2>Reservations</h2><span class="date">Search across every booking on the books</span></div>
+        <div class="blk">
+          <div class="blk-h"><h3>All reservations</h3></div>
+          <div style="padding:16px 18px 0">
+            <div class="tools-row">
+              <input class="search-input" id="resSearch" placeholder="Search guest name or confirmation number…" oninput="renderReservations()">
+            </div>
+          </div>
+          <div class="filter-pills" id="resFilters">
+            <button class="filter-pill on" data-f="all" onclick="setResFilter('all',this)">All</button>
+            <button class="filter-pill" data-f="booked" onclick="setResFilter('booked',this)">Booked</button>
+            <button class="filter-pill" data-f="precheck" onclick="setResFilter('precheck',this)">Pre-checked</button>
+            <button class="filter-pill" data-f="inhouse" onclick="setResFilter('inhouse',this)">In-house</button>
+            <button class="filter-pill" data-f="departed" onclick="setResFilter('departed',this)">Departed</button>
+            <button class="filter-pill" data-f="cancelled" onclick="setResFilter('cancelled',this)">Cancelled</button>
+          </div>
+          <table>
+            <thead><tr><th>Guest</th><th>Residence</th><th>Dates</th><th>Guests</th><th>Status</th><th style="text-align:right">Total</th><th></th></tr></thead>
+            <tbody id="resRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- GUESTS -->
+      <div class="sview" id="v-guests">
+        <div class="shead"><h2>Guests</h2><span class="date">Profiles, preferences & stay history</span></div>
+        <div class="tools-row">
+          <input class="search-input" id="guestSearch" placeholder="Search guests by name…" oninput="renderGuests()">
+        </div>
+        <div class="guest-grid" id="guestGrid"></div>
       </div>
 
       <!-- HOUSEKEEPING -->
@@ -346,6 +448,37 @@ tr.hl{background:#FBF6EC}
         <div class="blk" id="tourReqBlk">
           <div class="blk-h"><h3>Open queue</h3></div>
           <div id="reqQueue"><div class="req-empty">No open requests. Everything a guest asks for in the app lands here with an SLA timer.</div></div>
+        </div>
+      </div>
+
+      <!-- REPORTS -->
+      <div class="sview" id="v-reports">
+        <div class="shead"><h2>Owner report — July 2026</h2><span class="date">Prepared automatically · awaiting GM review</span></div>
+        <div class="blk">
+          <div class="blk-h"><h3>Performance summary</h3></div>
+          <div class="kpis" style="padding:16px 18px 0">
+            <div class="kpi"><div class="k">Occupancy</div><div class="v">78<small>%</small></div></div>
+            <div class="kpi"><div class="k">ADR</div><div class="v">AED 512</div></div>
+            <div class="kpi"><div class="k">RevPAR</div><div class="v">AED 399</div></div>
+            <div class="kpi"><div class="k">Guest satisfaction</div><div class="v">4.6<small>/5</small></div></div>
+          </div>
+          <div style="padding:6px 18px 22px">
+            <p style="font-size:13px;line-height:1.8">Occupancy rose six points this month, driven by corporate extended stays following the OTA onboarding completed in Phase 1. ADR softened slightly mid-month as regional compression eased after ADIPEC, though RevPAR remained ahead of the Section 1 baseline target. Three maintenance items are flagged below for owner attention. Guest satisfaction held steady at 4.6, supported by faster request resolution through the new routing system.</p>
+            <p style="font-size:10.5px;color:var(--muted);margin-top:14px;font-style:italic">Narrative drafted automatically from this month's operating data. Reviewed by the on-site General Manager before it reaches ownership — nothing is sent unedited.</p>
+          </div>
+        </div>
+        <div class="blk">
+          <div class="blk-h"><h3>Flagged for ownership</h3></div>
+          <table>
+            <tbody>
+              <tr><td>Room 1410 — recurring AC fault, 3 tickets in 60 days</td><td style="text-align:right"><span class="pill warn">Recommend replacement</span></td></tr>
+              <tr><td>Commercial unit G-04 — lease renewal due next month</td><td style="text-align:right"><span class="pill info">For review</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="rowbtn" onclick="toast('Report opened for editing')">Edit narrative</button>
+          <button class="rowbtn primary" id="sendReportBtn" onclick="sendReport()">Approve &amp; send to ownership</button>
         </div>
       </div>
     </div>
@@ -390,6 +523,9 @@ tr.hl{background:#FBF6EC}
   </div>
 </div>
 
+<!-- staff-side toast -->
+<div class="staff-toast" id="staffToast"></div>
+
 <!-- event log -->
 <div class="eventlog" id="tourLog"><span class="lab">System events</span><div id="evStream"></div></div>
 
@@ -403,17 +539,22 @@ tr.hl{background:#FBF6EC}
   <div class="scan-modal" id="scanModal"></div>
 </div>
 
+<!-- GENERIC MODAL: guest profile / reservation detail -->
+<div class="modal-bg" id="genBg" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card" id="genModal"></div>
+</div>
+
 <script>
 /* ================= shared state ================= */
 const S={
   preChecked:false, arrivalTime:null, idDone:false,
   roomState:'cleaning',           // cleaning -> inspected -> occupied -> dirty
   checkedIn:false, keyIssued:false, keyType:null, doorOpened:false,
-  requests:[                      // {id,label,status,room,guest,sla}
-    {id:-1,label:'Fresh towels',status:'open',room:'1104',guest:'Daniel Osei',sla:'SLA 18 min left'},
-    {id:-2,label:'Extra pillows · 2',status:'open',room:'2011',guest:'Mariam Khoury',sla:'SLA 26 min left'},
-    {id:-3,label:'Maintenance: bathroom light flickering',status:'done',room:'1912',guest:'Omar Al Nuaimi',sla:''},
-    {id:-4,label:'Late checkout — 14:00',status:'done',room:'707',guest:'Priya Raman',sla:''},
+  requests:[                      // {id,label,status,room,guest,sla,dept,escalate}
+    {id:-1,label:'Fresh towels',status:'open',room:'1104',guest:'Daniel Osei',sla:'SLA 18 min left',dept:'Housekeeping'},
+    {id:-2,label:'Extra pillows · 2',status:'open',room:'2011',guest:'Mariam Khoury',sla:'SLA 26 min left',dept:'Housekeeping'},
+    {id:-3,label:'Maintenance: bathroom light flickering',status:'done',room:'1912',guest:'Omar Al Nuaimi',sla:'',dept:'Maintenance'},
+    {id:-4,label:'Late checkout — 14:00',status:'done',room:'707',guest:'Priya Raman',sla:'',dept:'Front Desk'},
   ],
   folio:[
     {d:'15–20 Aug',l:'Premium Room · Flexible · 5 nights',v:2100},
@@ -421,8 +562,82 @@ const S={
   ],
   checkedOut:false,
   gtab:'stay',
+  role:'frontdesk',
 };
 let reqId=0;
+
+/* ================= guest directory & reservations ================= */
+const GUESTS=[
+  {id:'haddad',name:'Layla Haddad',vip:true,tier:'Returning guest · 3rd stay',
+   email:'l.haddad@guestmail.com',phone:'+971 55 214 4417',
+   prefs:['High floor','Away from lifts','Extra pillows'],
+   note:'Frequent extended-stay corporate booker. Consistently requests quiet, high-floor rooms — flag for upgrade when available.',
+   stays:[
+     {conf:'BLM-2026-4417',dates:'15–20 Aug 2026',room:'Premium Room · 1406',status:'booked',occ:2,total:2175,payment:'Visa •••• 4417 · guaranteed'},
+     {conf:'BLM-2025-3108',dates:'02–07 Feb 2025',room:'Premium Room · 1201',status:'past',occ:2,total:1980,payment:'Visa •••• 4417 · settled'},
+     {conf:'BLM-2024-1955',dates:'11–14 Nov 2024',room:'Executive Suite · 902',status:'past',occ:1,total:2460,payment:'Visa •••• 4417 · settled'},
+   ]},
+  {id:'chen',name:'Marcus Chen',vip:false,tier:'2nd stay',
+   email:'m.chen@guestmail.com',phone:'+971 50 337 4409',
+   prefs:['Late checkout when available'],note:'',
+   stays:[
+     {conf:'BLM-2026-4409',dates:'15–17 Aug 2026',room:'Executive Suite · 806',status:'booked',occ:1,total:1840,payment:'Mastercard •••• 2210 · guaranteed'},
+     {conf:'BLM-2025-2290',dates:'20–22 May 2025',room:'Executive Suite · 811',status:'past',occ:1,total:1760,payment:'Mastercard •••• 2210 · settled'},
+   ]},
+  {id:'suwaidi',name:'Fatima Al Suwaidi',vip:true,tier:'Returning guest · 4th stay',
+   email:'f.alsuwaidi@guestmail.com',phone:'+971 56 902 4421',
+   prefs:['Gulf view','Extra beds for children','Kitchenette essentials restocked'],
+   note:'Travels with extended family — books the largest available apartment. High lifetime value; consider a welcome amenity.',
+   stays:[
+     {conf:'BLM-2026-4421',dates:'15–22 Aug 2026',room:'One-Bedroom Apartment · 2203',status:'precheck',occ:3,total:4550,payment:'Corporate account — Al Suwaidi Holdings · direct bill'},
+     {conf:'BLM-2025-3877',dates:'01–10 Jun 2025',room:'Two-Bedroom Apartment · 2401',status:'past',occ:5,total:8160,payment:'Corporate account — Al Suwaidi Holdings · direct bill'},
+     {conf:'BLM-2024-2201',dates:'14–19 Dec 2024',room:'One-Bedroom Apartment · 2105',status:'past',occ:4,total:3800,payment:'Corporate account — Al Suwaidi Holdings · direct bill'},
+     {conf:'BLM-2024-0890',dates:'03–08 Mar 2024',room:'One-Bedroom Apartment · 2203',status:'past',occ:3,total:3650,payment:'Corporate account — Al Suwaidi Holdings · direct bill'},
+   ]},
+  {id:'osei',name:'Daniel Osei',vip:false,tier:'1st stay',
+   email:'d.osei@guestmail.com',phone:'+971 52 118 4430',
+   prefs:[],note:'',
+   stays:[{conf:'BLM-2026-4430',dates:'12–18 Aug 2026',room:'Premium Room · 1104',status:'inhouse',occ:1,total:1980,payment:'Visa •••• 8814 · guaranteed'}]},
+  {id:'khoury',name:'Mariam Khoury',vip:true,tier:'Returning guest · 2nd stay',
+   email:'m.khoury@guestmail.com',phone:'+971 54 776 4432',
+   prefs:['Twin beds for children','Quiet floor'],note:'',
+   stays:[
+     {conf:'BLM-2026-4432',dates:'10–20 Aug 2026',room:'Two-Bedroom Apartment · 2011',status:'inhouse',occ:4,total:6200,payment:'Amex •••• 5521 · guaranteed'},
+     {conf:'BLM-2025-1187',dates:'05–09 Jan 2025',room:'One-Bedroom Apartment · 2110',status:'past',occ:3,total:3040,payment:'Amex •••• 5521 · settled'},
+   ]},
+  {id:'nuaimi',name:'Omar Al Nuaimi',vip:false,tier:'1st stay',
+   email:'o.alnuaimi@guestmail.com',phone:'+971 50 664 4398',
+   prefs:[],note:'Reported a recurring AC issue in 1912 — flagged for maintenance review.',
+   stays:[{conf:'BLM-2026-4398',dates:'09–16 Aug 2026',room:'Premium Room · 1912',status:'inhouse',occ:2,total:2450,payment:'Mastercard •••• 3390 · guaranteed'}]},
+  {id:'raman',name:'Priya Raman',vip:false,tier:'2nd stay',
+   email:'p.raman@guestmail.com',phone:'+971 55 903 4390',
+   prefs:['Late checkout requested most stays'],note:'',
+   stays:[
+     {conf:'BLM-2026-4390',dates:'08–15 Aug 2026',room:'Executive Suite · 707',status:'departed',occ:1,total:1610,payment:'Visa •••• 7742 · settled'},
+     {conf:'BLM-2025-0654',dates:'18–21 Sep 2025',room:'Executive Suite · 715',status:'past',occ:1,total:1290,payment:'Visa •••• 7742 · settled'},
+   ]},
+  {id:'okafor',name:'James Okafor',vip:false,tier:'1st stay',
+   email:'j.okafor@guestmail.com',phone:'+971 56 441 4441',
+   prefs:[],note:'',
+   stays:[{conf:'BLM-2026-4441',dates:'22–26 Aug 2026',room:'Executive Suite · 1508',status:'booked',occ:2,total:2960,payment:'Visa •••• 1156 · guaranteed'}]},
+  {id:'mazrouei',name:'Sara Al Mazrouei',vip:false,tier:'Cancelled booking',
+   email:'s.almazrouei@guestmail.com',phone:'+971 50 227 4308',
+   prefs:[],note:'Cancelled due to a schedule change; offered flexible rebooking for a future date.',
+   stays:[{conf:'BLM-2026-4308',dates:'01–05 Jul 2026',room:'Premium Room · 1310',status:'cancelled',occ:2,total:0,payment:'— · booking cancelled'}]},
+];
+const RESERVATIONS=GUESTS.map(g=>({...g.stays[0],guest:g.name,guestId:g.id}));
+const AVAILABLE_ROOMS=[
+  {room:'Premium Room · 1408',note:'Clean · floor 14'},
+  {room:'Premium Room · 1412',note:'Clean · floor 14'},
+  {room:'Premium Room · 1416',note:'Clean · floor 14'},
+  {room:'Executive Suite · 811',note:'Clean · floor 8'},
+  {room:'Executive Suite · 815',note:'Clean · floor 8'},
+  {room:'One-Bedroom Apartment · 2205',note:'Clean · floor 22'},
+  {room:'Two-Bedroom Apartment · 2403',note:'Clean · floor 24'},
+];
+const RES_STATUS_LABEL={booked:'Booked',precheck:'Pre-checked',inhouse:'In-house',departed:'Departed',cancelled:'Cancelled',past:'Completed'};
+const RES_STATUS_PILL={booked:'grey',precheck:'info',inhouse:'ok',departed:'grey',cancelled:'bad',past:'grey'};
+let resFilter='all';
 
 /* ================= event log ================= */
 function logEv(dir,txt){
@@ -443,7 +658,7 @@ function makeQR(el,seed){
 }
 makeQR(document.getElementById('qr1'),4417);
 
-/* ================= push notifications ================= */
+/* ================= push notifications (guest phone) ================= */
 let pushTimer=null;
 function toast(sub,title='Blumont Capital Tower'){
   document.getElementById('pushT').textContent=title;
@@ -452,12 +667,53 @@ function toast(sub,title='Blumont Capital Tower'){
   clearTimeout(pushTimer);pushTimer=setTimeout(()=>p.classList.remove('show'),3400);
 }
 
-/* ================= staff nav ================= */
+/* ================= staff-side toast (console notifications) ================= */
+let staffToastTimer=null;
+function staffToast(msg){
+  const el=document.getElementById('staffToast');
+  el.textContent=msg;
+  el.classList.add('show');
+  clearTimeout(staffToastTimer);
+  staffToastTimer=setTimeout(()=>el.classList.remove('show'),2800);
+}
+
+/* ================= staff nav & roles ================= */
+const ROLE_VIEWS={
+  frontdesk:['today','res','guests','hk','req'],
+  housekeeping:['hk','req'],
+  gm:['today','res','guests','hk','req','reports'],
+};
+const ROLE_LABEL={frontdesk:'Front Desk',housekeeping:'Housekeeping',gm:'General Manager'};
+
 function sview(id,btn){
+  if(!ROLE_VIEWS[S.role].includes(id)){
+    staffToast(`Restricted — the ${ROLE_LABEL[S.role]} role doesn't have access to this screen.`);
+    logEv('SYSTEM',`Access blocked — ${ROLE_LABEL[S.role]} role attempted to open a restricted screen`);
+    return;
+  }
   document.querySelectorAll('.sview').forEach(v=>v.classList.remove('on'));
   document.getElementById('v-'+id).classList.add('on');
-  document.querySelectorAll('.snav button').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.snav button[data-view]').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+}
+function setRole(role,btn){
+  S.role=role;
+  document.querySelectorAll('.role-switch button').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
+  applyRoleVisibility();
+  logEv('SYSTEM',`Staff console switched to ${ROLE_LABEL[role]} view — navigation scoped to this role's permissions`);
+}
+function applyRoleVisibility(){
+  const allowed=ROLE_VIEWS[S.role];
+  document.querySelectorAll('.snav button[data-view]').forEach(b=>{
+    b.classList.toggle('locked',!allowed.includes(b.dataset.view));
+  });
+  const activeBtn=document.querySelector('.snav button.on[data-view]');
+  const activeView=activeBtn?activeBtn.dataset.view:'today';
+  if(!allowed.includes(activeView)){
+    const fallbackBtn=document.querySelector(`.snav button[data-view="${allowed[0]}"]`);
+    if(fallbackBtn)sview(allowed[0],fallbackBtn);
+  }
 }
 
 /* ================= housekeeping ================= */
@@ -557,7 +813,7 @@ function renderReqQueue(){
   if(!open.length){q.innerHTML='<div class="req-empty">No open requests. Everything a guest asks for in the app lands here with an SLA timer.</div>';return;}
   q.innerHTML=open.map(r=>`
     <div class="req-row">
-      <div><div class="gname">${r.label}</div><div class="gsub">Room ${r.room} · ${r.guest} · via guest app</div></div>
+      <div><div class="gname">${r.label}${r.escalate?' <span class="pill bad">Flag for GM</span>':''}</div><div class="gsub">Room ${r.room} · ${r.guest} · ${r.dept||'Housekeeping'} · routed automatically</div></div>
       <div style="display:flex;gap:14px;align-items:center">
         ${r.status==='done'?'<span class="pill ok">Completed</span>':`<span class="sla">${r.sla||'SLA 30 min'}</span><button class="rowbtn primary" onclick="doneReq(${r.id})">Mark done</button>`}
       </div>
@@ -568,6 +824,140 @@ function doneReq(id){
   renderReqQueue();renderApp();
   logEv('STAFF → GUEST',`Request completed: ${r.label} — Room ${r.room} notified`);
   if(r.guest==='Layla Haddad')toast(`${r.label} — done. Anything else, just ask.`);
+}
+
+/* ================= generic modal ================= */
+function openModal(html){document.getElementById('genModal').innerHTML=html;document.getElementById('genBg').classList.add('on');}
+function closeModal(){document.getElementById('genBg').classList.remove('on');}
+
+/* ================= guest profiles ================= */
+function openGuestProfile(id){
+  const g=GUESTS.find(x=>x.id===id);
+  if(!g)return;
+  const totalSpend=g.stays.reduce((a,s)=>a+(s.total||0),0);
+  openModal(`
+    <div class="mhead">
+      <button class="modal-x" onclick="closeModal()">×</button>
+      <h3>${g.name}${g.vip?' <span style="color:var(--bronze);font-size:14px">· VIP</span>':''}</h3>
+      <div class="msub">${g.tier} · ${g.email} · ${g.phone}</div>
+    </div>
+    <div class="modal-body">
+      ${g.prefs.length?`<div class="pref-tags">${g.prefs.map(p=>`<span class="pref-tag">${p}</span>`).join('')}</div>`:''}
+      ${g.note?`<div class="note-box">${g.note}</div>`:''}
+      <div class="profile-facts">
+        <div><div class="k">Total stays</div><div class="v serif" style="font-size:17px">${g.stays.length}</div></div>
+        <div><div class="k">Lifetime spend</div><div class="v serif" style="font-size:17px">AED ${totalSpend.toLocaleString()}</div></div>
+      </div>
+      <div class="stay-hist-h">Stay history</div>
+      <table>
+        <thead><tr><th>Dates</th><th>Residence</th><th>Status</th><th style="text-align:right">Total</th></tr></thead>
+        <tbody>${g.stays.map(s=>`<tr><td>${s.dates}</td><td>${s.room}</td><td><span class="pill ${RES_STATUS_PILL[s.status]}">${RES_STATUS_LABEL[s.status]}</span></td><td style="text-align:right">${s.total?'AED '+s.total.toLocaleString():'—'}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>`);
+}
+
+/* ================= reservations ================= */
+function setResFilter(f,btn){
+  resFilter=f;
+  document.querySelectorAll('#resFilters .filter-pill').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderReservations();
+}
+function renderReservations(){
+  const body=document.getElementById('resRows');
+  if(!body)return;
+  const q=(document.getElementById('resSearch')?.value||'').toLowerCase().trim();
+  const rows=RESERVATIONS.filter(r=>{
+    const matchesQ=!q||r.guest.toLowerCase().includes(q)||r.conf.toLowerCase().includes(q);
+    const matchesF=resFilter==='all'||r.status===resFilter;
+    return matchesQ&&matchesF;
+  });
+  if(!rows.length){body.innerHTML='<tr><td colspan="7" class="no-results">No reservations match your search.</td></tr>';return;}
+  body.innerHTML=rows.map(r=>{
+    const g=GUESTS.find(x=>x.id===r.guestId);
+    return `<tr>
+      <td><div class="gname gname-link" onclick="openGuestProfile('${r.guestId}')">${r.guest}${g&&g.vip?' <span class="pill" style="background:#F7EEDB;color:var(--bronze)">VIP</span>':''}</div><div class="gsub">${r.conf}</div></td>
+      <td>${r.room}</td>
+      <td>${r.dates}</td>
+      <td>${r.occ||1}</td>
+      <td><span class="pill ${RES_STATUS_PILL[r.status]}">${RES_STATUS_LABEL[r.status]}</span></td>
+      <td style="text-align:right">${r.total?'AED '+r.total.toLocaleString():'—'}</td>
+      <td><button class="rowbtn" onclick="openReservation('${r.conf}')">View</button></td>
+    </tr>`;
+  }).join('');
+}
+function openReservation(conf){
+  const r=RESERVATIONS.find(x=>x.conf===conf);
+  if(!r)return;
+  const g=GUESTS.find(x=>x.id===r.guestId);
+  openModal(`
+    <div class="mhead">
+      <button class="modal-x" onclick="closeModal()">×</button>
+      <h3>${r.conf}</h3>
+      <div class="msub">${r.dates} · ${r.room}</div>
+    </div>
+    <div class="modal-body">
+      <div class="profile-facts">
+        <div><div class="k">Guest</div><div class="v">${r.guest}</div></div>
+        <div><div class="k">Status</div><div class="v"><span class="pill ${RES_STATUS_PILL[r.status]}">${RES_STATUS_LABEL[r.status]}</span></div></div>
+        <div><div class="k">Guests</div><div class="v">${r.occ||1}</div></div>
+        <div><div class="k">Total</div><div class="v">${r.total?'AED '+r.total.toLocaleString():'—'}</div></div>
+        <div style="grid-column:1/-1"><div class="k">Payment</div><div class="v">${r.payment||'—'}</div></div>
+      </div>
+      ${g&&g.prefs.length?`<div class="stay-hist-h">Noted preferences</div><div class="pref-tags">${g.prefs.map(p=>`<span class="pref-tag">${p}</span>`).join('')}</div>`:''}
+      ${['booked','precheck','inhouse'].includes(r.status)?`<button class="rowbtn" style="width:100%;margin-top:4px" onclick="openRoomMove('${conf}')">⇄ Move room</button>`:''}
+      <button class="rowbtn primary" style="width:100%;margin-top:8px" onclick="openGuestProfile('${r.guestId}')">View full guest profile →</button>
+    </div>`);
+}
+function openRoomMove(conf){
+  const r=RESERVATIONS.find(x=>x.conf===conf);
+  if(!r)return;
+  const type=r.room.split(' · ')[0];
+  const sameType=AVAILABLE_ROOMS.filter(x=>x.room.startsWith(type));
+  const options=(sameType.length?sameType:AVAILABLE_ROOMS).slice(0,4);
+  openModal(`
+    <div class="mhead">
+      <button class="modal-x" onclick="openReservation('${conf}')">×</button>
+      <h3>Move room</h3>
+      <div class="msub">${r.guest} · currently ${r.room}</div>
+    </div>
+    <div class="modal-body">
+      <div class="stay-hist-h">Available rooms</div>
+      ${options.map(o=>`<div class="req-row"><div><div class="gname">${o.room}</div><div class="gsub">${o.note}</div></div><button class="rowbtn primary" onclick="confirmRoomMove('${conf}','${o.room}')">Move here</button></div>`).join('')}
+      <button class="rowbtn" style="width:100%;margin-top:12px" onclick="openReservation('${conf}')">Cancel</button>
+    </div>`);
+}
+function confirmRoomMove(conf,newRoom){
+  const r=RESERVATIONS.find(x=>x.conf===conf);
+  if(!r)return;
+  const g=GUESTS.find(x=>x.id===r.guestId);
+  const oldRoom=r.room;
+  r.room=newRoom;
+  if(g)g.stays[0].room=newRoom;
+  renderReservations();renderGuests();
+  logEv('STAFF',`Room move: ${r.guest} — ${oldRoom} → ${newRoom}. Guest notified automatically.`);
+  staffToast(`${r.guest} moved to ${newRoom}.`);
+  openReservation(conf);
+}
+
+/* ================= guest directory ================= */
+function renderGuests(){
+  const grid=document.getElementById('guestGrid');
+  if(!grid)return;
+  const q=(document.getElementById('guestSearch')?.value||'').toLowerCase().trim();
+  const list=GUESTS.filter(g=>!q||g.name.toLowerCase().includes(q));
+  if(!list.length){grid.innerHTML='<div class="no-results">No guests match your search.</div>';return;}
+  grid.innerHTML=list.map(g=>{
+    const cur=g.stays[0];
+    return `<button class="guest-card" onclick="openGuestProfile('${g.id}')">
+      <div class="guest-av ${g.vip?'vip':''}">${g.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div>
+      <div class="guest-info">
+        <div class="gname">${g.name}${g.vip?'<span class="gtag">VIP</span>':''}</div>
+        <div class="gline">${g.tier}</div>
+        <div class="gline">${cur.room} · ${cur.dates} <span class="pill ${RES_STATUS_PILL[cur.status]}">${RES_STATUS_LABEL[cur.status]}</span></div>
+      </div>
+    </button>`;
+  }).join('');
 }
 
 /* ================= guest app ================= */
@@ -619,6 +1009,11 @@ function renderApp(){
   if(S.gtab==='req'){
     const can=S.checkedIn;
     b.innerHTML=`
+      <div class="ask-box">
+        <input type="text" id="askInput" placeholder="Need something? Just ask." ${can?'':'disabled'} onkeydown="if(event.key==='Enter')askConcierge()">
+        <button ${can?'':'disabled'} onclick="askConcierge()">Send</button>
+      </div>
+      <div class="ask-hint">Understood and routed instantly — in English, Arabic, Russian, or Chinese.</div>
       <div class="req-opts">
         ${['Fresh towels','Make up room','Extra pillows','Report an issue'].map(l=>`<button ${can?'':'disabled'} onclick="sendReq('${l}')">${l}</button>`).join('')}
       </div>
@@ -629,6 +1024,7 @@ function renderApp(){
     const tot=S.folio.reduce((a,x)=>a+x.v,0);
     b.innerHTML=`
       ${S.folio.map(f=>`<div class="frow"><div><div>${f.l}</div><div class="d">${f.d}</div></div><div>AED ${f.v.toLocaleString()}</div></div>`).join('')}
+      <div class="frow" style="color:var(--muted);font-size:11px"><div>Payment on file</div><div style="color:var(--ink)">Visa •••• 4417</div></div>
       <div class="ftot"><span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">Total</span><span class="v serif">AED ${tot.toLocaleString()}</span></div>
       <button class="checkout-btn" ${S.checkedIn?'':'disabled'} onclick="expressCheckout()">Express checkout — settle & go</button>
       <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.6">No desk visit needed. Your key deactivates automatically<br>and your receipt is emailed instantly.</div>`;
@@ -666,9 +1062,33 @@ function unlockDoor(btn){
 /* guest request */
 function sendReq(label){
   if(label==='Report an issue')label='Maintenance: AC too warm';
-  S.requests.unshift({id:++reqId,label,status:'open',room:'1406',guest:'Layla Haddad',sla:'SLA 30 min'});
+  const dept=label.startsWith('Maintenance')?'Maintenance':'Housekeeping';
+  S.requests.unshift({id:++reqId,label,status:'open',room:'1406',guest:'Layla Haddad',sla:'SLA 30 min',dept});
   renderApp();renderReqQueue();
-  logEv('GUEST → STAFF',`Request raised: ${label} — routed to ${label.startsWith('Maintenance')?'maintenance queue':'housekeeping queue'}, SLA 30 min`);
+  logEv('GUEST → STAFF',`Request raised: ${label} — routed to ${dept.toLowerCase()} queue, SLA 30 min`);
+}
+
+/* concierge — free-text requests, understood and routed instantly */
+function askConcierge(){
+  const inp=document.getElementById('askInput');
+  if(!inp||inp.disabled)return;
+  const text=inp.value.trim();
+  if(!text)return;
+  inp.value='';
+  const low=text.toLowerCase();
+  const maint=/\b(ac|air.?con|light|plumb|leak|broken|smoke|stuck|rattl|no (hot )?water|outlet|tv|wifi|door)\b/.test(low);
+  const urgent=/\b(leak|smoke|broken|not working|rattl|no (hot )?water|stuck|alarm|urgent)\b/.test(low);
+  const escalate=/\b(again|still|third time|already (asked|reported)|not happy|unacceptable)\b/.test(low);
+  const dept=maint?'Maintenance':'Housekeeping';
+  const reply=escalate
+    ? "I'm sorry this hasn't been resolved yet — I've flagged it for the duty manager directly, and it's marked priority."
+    : urgent
+      ? "I've sent this to our maintenance team as a priority — expect someone within fifteen minutes."
+      : "Noted — I've passed this straight to the team, no need to call down.";
+  S.requests.unshift({id:++reqId,label:text,status:'open',room:'1406',guest:'Layla Haddad',sla:urgent||escalate?'Priority · 15 min':'SLA 30 min',dept,escalate});
+  renderApp();renderReqQueue();
+  logEv('GUEST → STAFF',`Concierge understood: “${text}” — routed to ${dept.toLowerCase()}${urgent?' · priority':''}${escalate?' · flagged for GM':''}`);
+  toast(reply);
 }
 
 /* checkout */
@@ -681,6 +1101,14 @@ function expressCheckout(){
   document.getElementById('depEmpty').style.display='none';
   document.getElementById('kIn').textContent='96';
   logEv('GUEST → STAFF','Express checkout — folio settled AED 2,175 · key revoked · room 1406 flipped to Dirty on housekeeping board');
+}
+
+/* ================= owner report ================= */
+function sendReport(){
+  const btn=document.getElementById('sendReportBtn');
+  if(btn.disabled)return;
+  btn.disabled=true;btn.textContent='Sent to ownership';
+  logEv('STAFF','Monthly owner report approved by GM and sent to ownership — occupancy, ADR, RevPAR, GOP, and flagged maintenance items included');
 }
 
 /* ================= guided walkthrough ================= */
@@ -813,7 +1241,7 @@ window.addEventListener('resize',()=>{
 });
 
 /* init */
-renderHK();renderReqQueue();renderApp();
+renderHK();renderReqQueue();renderApp();renderReservations();renderGuests();applyRoleVisibility();
 logEv('SYSTEM','Reservation BLM-2026-4417 confirmed — QR token minted, confirmation email sent');
 tourWelcome();
 </script>
