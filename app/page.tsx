@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 const PROPOSAL_DOC = "/Blumont-Capital-Tower-Proposal.docx";
@@ -359,14 +358,14 @@ function PillarGallery({ pillars }: { pillars: Pillar[] }) {
 }
 
 export default function Home() {
-  const heroImgRef = useRef<HTMLImageElement>(null);
+  const heroMediaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let ticking = false;
     const update = () => {
-      if (heroImgRef.current) {
+      if (heroMediaRef.current) {
         const offset = Math.min(window.scrollY * 0.15, 70);
-        heroImgRef.current.style.transform = `scale(1.12) translate3d(0, ${offset}px, 0)`;
+        heroMediaRef.current.style.transform = `scale(1.12) translate3d(0, ${offset}px, 0)`;
       }
       ticking = false;
     };
@@ -404,16 +403,7 @@ export default function Home() {
 
       {/* ================= HERO ================= */}
       <header className="hero" id="top">
-        <div className="hero-media hero-media-preview">
-          <Image
-            ref={heroImgRef}
-            src="/images/blumont-tower-preview.png"
-            alt="Blumont Capital Tower, Abu Dhabi"
-            fill
-            priority
-            sizes="100vw"
-          />
-        </div>
+        <div className="hero-media hero-media-preview" ref={heroMediaRef} />
         <div className="wrap">
           <span className="label reveal">
             A Proposal by REOM Homes Real Estate L.L.C.
