@@ -554,7 +554,15 @@ export default function Home() {
           <div className="wrap">
             <div className="section-head reveal">
               <span className="label">03 · Implementation</span>
-              <h2>Four phases, revenue first</h2>
+              <h2>
+                Four phases, revenue first, with rebranding and marketing
+                throughout
+              </h2>
+              <p className="section-intro">
+                Intensive repositioning of the brand and sustained marketing
+                sit at the heart of every stage, from mobilization through
+                occupancy growth.
+              </p>
             </div>
             <div className="timeline reveal">
               {phases.map((phase) => (
