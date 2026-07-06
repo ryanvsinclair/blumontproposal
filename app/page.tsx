@@ -613,8 +613,7 @@ export default function Home() {
                 <span className="fee-of">of gross revenue, monthly</span>
                 <p className="fee-plain">
                   Covers day-to-day management, operational oversight, revenue
-                  management, marketing, leasing supervision, and guest
-                  experience.
+                  management, and leasing supervision.
                 </p>
               </div>
             </div>
