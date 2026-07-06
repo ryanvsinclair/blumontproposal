@@ -130,6 +130,18 @@ header.hero {
   object-position: 50% 35%;
   will-change: transform;
 }
+.hero-media-preview img {
+  object-position: 50% 3%;
+}
+.hero-media-preview::after {
+  background: linear-gradient(
+    180deg,
+    rgba(19, 17, 15, 0.15) 0%,
+    rgba(19, 17, 15, 0) 30%,
+    rgba(19, 17, 15, 0.4) 58%,
+    rgba(15, 26, 27, 0.92) 100%
+  );
+}
 .hero-media::after {
   content: "";
   position: absolute;
@@ -1019,6 +1031,7 @@ footer .fine { font-size: 12px; opacity: 0.55; }
 }
 @media (max-width: 640px) {
   .hero-media img { object-position: 65% 35%; }
+  .hero-media-preview img { object-position: 50% 4%; }
 }
 @media (max-width: 900px) {
   .stats { grid-template-columns: 1fr 1fr; }

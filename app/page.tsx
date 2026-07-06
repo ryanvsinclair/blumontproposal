@@ -404,10 +404,10 @@ export default function Home() {
 
       {/* ================= HERO ================= */}
       <header className="hero" id="top">
-        <div className="hero-media">
+        <div className="hero-media hero-media-preview">
           <Image
             ref={heroImgRef}
-            src="/images/blumont-tower-hd.png"
+            src="/images/blumont-tower-preview.png"
             alt="Blumont Capital Tower, Abu Dhabi"
             fill
             priority
