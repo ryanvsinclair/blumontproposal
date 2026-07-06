@@ -202,7 +202,7 @@ const pillars: Pillar[] = [
     bullets: [
       "Dedicated on-site General Manager with direct oversight of all property functions",
       "Monthly operating report covering occupancy, ADR, RevPAR, gross revenue, GOP, leasing status, and guest satisfaction. The narrative is drafted automatically and reviewed by the GM before it reaches ownership",
-      "Semi-annual business review ahead of each incentive fee calculation",
+      "Semi-annual business review with ownership",
     ],
     note: "Performance is tracked against occupancy and ADR targets agreed with ownership, and ownership retains the right to request an independent review of the figures at any time.",
     demo: { href: "/demo", label: "See a live demo of the operating system" },
@@ -606,9 +606,9 @@ export default function Home() {
               <span className="label">04 · Commercial Terms</span>
               <h2>Success, directly linked</h2>
             </div>
-            <div className="fees reveal">
+            <div className="fees fees-single reveal">
               <div className="fee">
-                <span className="label">Base Management Fee</span>
+                <span className="label">Management Fee</span>
                 <span className="fee-num">10%</span>
                 <span className="fee-of">of gross revenue, monthly</span>
                 <p className="fee-plain">
@@ -617,23 +617,11 @@ export default function Home() {
                   experience.
                 </p>
               </div>
-              <div className="fee">
-                <span className="label">Incentive Management Fee</span>
-                <span className="fee-num">6%</span>
-                <span className="fee-of">
-                  of gross operating profit, semi-annually
-                </span>
-                <p className="fee-plain">
-                  Earned only on delivered profitability. REOM Homes&apos;
-                  return is tied to the operating result achieved for
-                  ownership.
-                </p>
-              </div>
             </div>
             <div className="fee-notes reveal">
               <p>
-                The fee structure is reviewed at the end of Year 1 against
-                actual occupancy and GOP performance.
+                The management fee is reviewed at the end of Year 1 against
+                actual occupancy and revenue performance.
               </p>
               <p>
                 <a href={PROPOSAL_DOC} download>
